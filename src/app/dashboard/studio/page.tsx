@@ -148,17 +148,17 @@ export default function CourseStudio() {
                                             </div>
                                         ) : (
                                             <div className="w-full aspect-video bg-slate-50 dark:bg-black/50 rounded-xl border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center p-8 gap-4 shadow-inner">
-                                                <LinkIcon className="w-12 h-12 text-slate-300 dark:text-slate-700" />
+                                                <LinkIcon className="w-12 h-12 text-slate-300 dark:text-slate-700 hover:text-violet-500 transition-colors" />
                                                 <input
                                                     type="text"
-                                                    placeholder={`Enter ${activeLesson.videoSource} URL here...`}
+                                                    placeholder={`Enter ${activeLesson.videoSource} link (e.g. docs.google.com/...)`}
                                                     value={activeLesson.videoUrl}
                                                     onChange={(e) => updateActiveLesson({ videoUrl: e.target.value })}
-                                                    className="w-full max-w-md bg-white dark:bg-black border border-slate-300 dark:border-white/20 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500 text-center shadow-sm"
+                                                    className="w-full max-w-xl bg-white dark:bg-black border border-slate-300 dark:border-white/20 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500 text-center shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-600"
                                                 />
                                                 {activeLesson.videoUrl && (
-                                                    <div className="px-4 py-2 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-sm font-medium rounded-lg flex items-center gap-2 mt-4">
-                                                        <Check className="w-4 h-4" /> Link valid and ready
+                                                    <div className="px-4 py-2 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-sm font-medium rounded-lg flex items-center gap-2 mt-4 transition-all">
+                                                        <Check className="w-4 h-4" /> Link attached securely
                                                     </div>
                                                 )}
                                             </div>
@@ -170,11 +170,16 @@ export default function CourseStudio() {
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="flex items-center gap-3">
                                                 <Mic className="w-5 h-5 text-violet-500" />
-                                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Voiceover & Audio</h2>
+                                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Voiceover & Audio Option</h2>
                                             </div>
-                                            <button className="px-4 py-1.5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                                                <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" /> Record
-                                            </button>
+                                            <div className="flex items-center gap-2">
+                                                <button className="px-4 py-1.5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                                    <UploadCloud className="w-4 h-4" /> Upload Audio
+                                                </button>
+                                                <button className="px-4 py-1.5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" /> Record
+                                                </button>
+                                            </div>
                                         </div>
                                         <div className="h-28 bg-slate-50 dark:bg-black/50 rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-inner relative overflow-hidden">
                                             {/* Mock audio wave */}
@@ -183,7 +188,7 @@ export default function CourseStudio() {
                                                     <div key={i} className="flex-1 bg-violet-500 rounded-full" style={{ height: `${Math.random() * 60 + 10}%` }} />
                                                 ))}
                                             </div>
-                                            <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium z-10 bg-white/50 dark:bg-black/50 px-3 py-1 rounded backdrop-blur-sm">Audio timeline</p>
+                                            <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium z-10 bg-white/50 dark:bg-black/50 px-3 py-1 rounded backdrop-blur-sm">Audio timeline (Optional)</p>
                                         </div>
                                     </div>
                                 </>
