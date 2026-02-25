@@ -8,6 +8,7 @@ type Message = { id: number; text: string; sender: "user" | "admin"; time: strin
 type Ticket = { id: number; userName: string; unread: boolean; preview: string; messages: Message[] };
 
 export default function SupportCenter() {
+    const [viewMode, setViewMode] = useState<"admin" | "user">("admin");
     const [tickets, setTickets] = useState<Ticket[]>([
         {
             id: 1,
@@ -36,6 +37,9 @@ export default function SupportCenter() {
 
     const activeTicket = tickets.find(t => t.id === activeTicketId);
 
+    const [newTicketModal, setNewTicketModal] = useState(false);
+    const [newTicketMessage, setNewTicketMessage] = useState("");
+
     const handleSend = (e: React.FormEvent) => {
         e.preventDefault();
         if (!reply.trim() || !activeTicketId) return;
@@ -44,9 +48,9 @@ export default function SupportCenter() {
             if (t.id === activeTicketId) {
                 return {
                     ...t,
-                    unread: false,
+                    unread: viewMode === "user" ? false : t.unread, // Admin replies don't make it unread for admin
                     preview: reply,
-                    messages: [...t.messages, { id: Date.now(), text: reply, sender: "admin", time: "Just now" }]
+                    messages: [...t.messages, { id: Date.now(), text: reply, sender: viewMode, time: "Just now" }]
                 };
             }
             return t;
@@ -55,16 +59,53 @@ export default function SupportCenter() {
         setReply("");
     };
 
+    const handleNewTicket = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!newTicketMessage.trim()) return;
+
+        const newTicket: Ticket = {
+            id: Date.now(),
+            userName: "Current User",
+            unread: false,
+            preview: newTicketMessage,
+            messages: [{ id: Date.now(), text: newTicketMessage, sender: "user", time: "Just now" }]
+        };
+
+        setTickets([newTicket, ...tickets]);
+        setActiveTicketId(newTicket.id);
+        setNewTicketModal(false);
+        setNewTicketMessage("");
+    };
+
     const selectTicket = (id: number) => {
         setActiveTicketId(id);
-        setTickets(tickets.map(t => t.id === id ? { ...t, unread: false } : t));
+        if (viewMode === "admin") {
+            setTickets(tickets.map(t => t.id === id ? { ...t, unread: false } : t));
+        }
     };
 
     return (
         <div className="space-y-6 h-full flex flex-col">
-            <header className="mb-4">
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Support Center</h1>
-                <p className="text-slate-500 dark:text-zinc-400">Respond to trainee and consultant support requests.</p>
+            <header className="mb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Support Center</h1>
+                    <p className="text-slate-500 dark:text-zinc-400">
+                        {viewMode === "admin" ? "Respond to trainee and consultant support requests." : "Get help with your Lykaa Academy account."}
+                    </p>
+                </div>
+                <div className="flex gap-3">
+                    {/* View Toggle for Mocking purposes */}
+                    <div className="bg-slate-200 dark:bg-white/10 p-1 rounded-lg flex text-sm font-medium">
+                        <button onClick={() => setViewMode('user')} className={`px-4 py-1.5 rounded-md transition-colors ${viewMode === 'user' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}>User View</button>
+                        <button onClick={() => setViewMode('admin')} className={`px-4 py-1.5 rounded-md transition-colors ${viewMode === 'admin' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}>Admin View</button>
+                    </div>
+
+                    {viewMode === "user" && (
+                        <button onClick={() => setNewTicketModal(true)} className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                            + New Ticket
+                        </button>
+                    )}
+                </div>
             </header>
 
             <div className="flex-1 min-h-[600px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden shadow-sm flex flex-col md:flex-row backdrop-blur-md">
@@ -76,7 +117,7 @@ export default function SupportCenter() {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-zinc-500" />
                             <input
                                 type="text"
-                                placeholder="Search consultants..."
+                                placeholder={viewMode === "admin" ? "Search consultants..." : "Search your tickets..."}
                                 className="w-full bg-slate-100 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-violet-500"
                             />
                         </div>
@@ -120,8 +161,8 @@ export default function SupportCenter() {
                                 {activeTicket.messages.map((msg) => (
                                     <div key={msg.id} className={`flex flex-col ${msg.sender === 'admin' ? 'items-end' : 'items-start'}`}>
                                         <div className={`max-w-[80%] md:max-w-[60%] p-4 rounded-2xl ${msg.sender === 'admin'
-                                                ? 'bg-violet-600 text-white rounded-tr-sm shadow-[0_4px_20px_rgba(139,92,246,0.15)]'
-                                                : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-white rounded-tl-sm border border-slate-200 dark:border-white/5'
+                                            ? 'bg-violet-600 text-white rounded-tr-sm shadow-[0_4px_20px_rgba(139,92,246,0.15)]'
+                                            : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-white rounded-tl-sm border border-slate-200 dark:border-white/5'
                                             }`}>
                                             <p className="text-sm">{msg.text}</p>
                                         </div>
@@ -137,7 +178,7 @@ export default function SupportCenter() {
                                         type="text"
                                         value={reply}
                                         onChange={(e) => setReply(e.target.value)}
-                                        placeholder="Type your reply to user..."
+                                        placeholder={viewMode === "admin" ? "Type your reply to user..." : "Type your message to support..."}
                                         className="w-full bg-white dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-full pl-5 pr-14 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-violet-500 shadow-inner"
                                     />
                                     <button
@@ -159,6 +200,36 @@ export default function SupportCenter() {
                 </div>
 
             </div>
+
+            {/* New Ticket Modal */}
+            {newTicketModal && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                    <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10">
+                        <div className="p-6 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50">
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Create Support Ticket</h3>
+                        </div>
+                        <form onSubmit={handleNewTicket}>
+                            <div className="p-6 space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">How can we help?</label>
+                                    <textarea
+                                        rows={4}
+                                        autoFocus
+                                        value={newTicketMessage}
+                                        onChange={(e) => setNewTicketMessage(e.target.value)}
+                                        placeholder="Describe your issue in detail..."
+                                        className="w-full bg-slate-50 dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-violet-500"
+                                    />
+                                </div>
+                            </div>
+                            <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3">
+                                <button type="button" onClick={() => setNewTicketModal(false)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors">Cancel</button>
+                                <button type="submit" disabled={!newTicketMessage.trim()} className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50">Create Ticket</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

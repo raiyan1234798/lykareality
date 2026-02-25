@@ -1,9 +1,11 @@
 "use client";
 
-import { ClipboardCheck, FileSearch, XCircle, CheckCircle, BarChart, Clock, Award } from "lucide-react";
-import { motion } from "framer-motion";
+import { ClipboardCheck, FileSearch, XCircle, CheckCircle, BarChart, Clock, Award, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 export default function Evaluations() {
+    const [logModal, setLogModal] = useState<any>(null);
     return (
         <div className="space-y-6">
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -80,7 +82,10 @@ export default function Evaluations() {
                                     <div className="text-sm text-slate-500 dark:text-zinc-500 font-medium mb-1">Score</div>
                                     <div className={`text-xl font-bold ${item.status === 'Passed' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>{item.score}%</div>
                                 </div>
-                                <button className="px-4 py-2 bg-slate-100 dark:bg-black hover:bg-slate-200 dark:hover:bg-white/5 border border-slate-300 dark:border-white/10 rounded-lg text-sm text-slate-700 dark:text-white transition-colors flex items-center gap-2 font-medium">
+                                <button
+                                    onClick={() => setLogModal(item)}
+                                    className="px-4 py-2 bg-slate-100 dark:bg-black hover:bg-slate-200 dark:hover:bg-white/5 border border-slate-300 dark:border-white/10 rounded-lg text-sm text-slate-700 dark:text-white transition-colors flex items-center gap-2 font-medium"
+                                >
                                     <FileSearch className="w-4 h-4" />
                                     View Log
                                 </button>
@@ -89,6 +94,79 @@ export default function Evaluations() {
                     ))}
                 </div>
             </div>
+
+            {/* View Log Modal */}
+            <AnimatePresence>
+                {logModal && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            className="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10"
+                        >
+                            <div className="p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-950/50">
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                    <FileSearch className="text-violet-500 w-5 h-5" />
+                                    Evaluation Log: {logModal.name}
+                                </h3>
+                                <button onClick={() => setLogModal(null)} className="text-slate-400 hover:text-slate-900 dark:text-zinc-500 dark:hover:text-white transition-colors">
+                                    <X className="w-5 h-5" />
+                                </button>
+                            </div>
+                            <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                                <div className="grid grid-cols-2 gap-4 mb-4">
+                                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5">
+                                        <p className="text-xs text-slate-500 dark:text-zinc-500">Course</p>
+                                        <p className="font-semibold text-slate-900 dark:text-white">{logModal.course}</p>
+                                    </div>
+                                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-black/30 border border-slate-200 dark:border-white/5">
+                                        <p className="text-xs text-slate-500 dark:text-zinc-500">Final Score</p>
+                                        <p className={`font-bold ${logModal.status === 'Passed' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>{logModal.score}%</p>
+                                    </div>
+                                </div>
+
+                                <h4 className="font-bold text-slate-900 dark:text-white mb-2">Question Breakdown</h4>
+                                <div className="space-y-3">
+                                    {/* Mock detailed logs */}
+                                    <div className="p-3 border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-500/5 rounded-lg">
+                                        <div className="flex justify-between mb-1">
+                                            <span className="text-sm font-medium text-slate-900 dark:text-white">Q1: Real Estate Laws Basics</span>
+                                            <span className="text-xs text-emerald-600 dark:text-emerald-500 font-bold">Passed</span>
+                                        </div>
+                                        <p className="text-xs text-slate-500 dark:text-zinc-400">User correctly selected option A.</p>
+                                    </div>
+                                    <div className="p-3 border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-500/5 rounded-lg">
+                                        <div className="flex justify-between mb-1">
+                                            <span className="text-sm font-medium text-slate-900 dark:text-white">Q2: Ethical Practices</span>
+                                            <span className="text-xs text-emerald-600 dark:text-emerald-500 font-bold">Passed</span>
+                                        </div>
+                                        <p className="text-xs text-slate-500 dark:text-zinc-400">User correctly mapped the definition.</p>
+                                    </div>
+                                    {logModal.status === 'Failed' && (
+                                        <div className="p-3 border border-rose-200 dark:border-rose-500/20 bg-rose-50/50 dark:bg-rose-500/5 rounded-lg">
+                                            <div className="flex justify-between mb-1">
+                                                <span className="text-sm font-medium text-slate-900 dark:text-white">Q3: Objections Handling</span>
+                                                <span className="text-xs text-rose-600 dark:text-rose-500 font-bold">Failed</span>
+                                            </div>
+                                            <p className="text-xs text-slate-500 dark:text-zinc-400">User entered "N/A" instead of correct terminology.</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="mt-4 pt-4 border-t border-slate-200 dark:border-white/10 text-xs font-mono text-slate-400 dark:text-zinc-500 bg-slate-100 dark:bg-black/50 p-3 rounded block whitespace-pre">
+                                    Sys Log:{'\n'}
+                                    [EVAL-JOB-ID]: {Math.random().toString(36).substring(7).toUpperCase()}{'\n'}
+                                    Processed at: {new Date().toISOString()}{'\n'}
+                                    Status Check: {logModal.status.toUpperCase()}
+                                </div>
+                            </div>
+                            <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end">
+                                <button onClick={() => setLogModal(null)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors">Close Log</button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
     BarChart3, Users, FileText, Video, ClipboardList, ShieldAlert,
-    Settings, Menu, X, ChevronLeft, UserCircle2, BookOpen, Moon, Sun
+    Settings, Menu, X, ChevronLeft, UserCircle2, BookOpen, Moon, Sun, Globe, Bell
 } from "lucide-react";
 import Chatbot from "@/components/ui/Chatbot";
 import { useTheme } from "next-themes";
@@ -28,6 +28,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const { theme, setTheme } = useTheme();
+    const [language, setLanguage] = useState("EN");
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [notifications, setNotifications] = useState([
+        { id: 1, text: "New completely access request from Sarah", time: "2m ago", unread: true },
+        { id: 2, text: "User Ali opened a support ticket", time: "1h ago", unread: true },
+        { id: 3, text: "Course Off-Plan updated successfully", time: "2h ago", unread: false },
+    ]);
+    const unreadCount = notifications.filter(n => n.unread).length;
 
     return (
         <div className="min-h-screen bg-slate-950 flex overflow-hidden">
@@ -125,16 +133,73 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <main className="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 dark:bg-[#0A0A0B] relative transition-colors">
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-200 via-slate-50 to-slate-50 dark:from-slate-950/20 dark:via-slate-950 dark:to-slate-950 z-0 pointer-events-none transition-colors" />
 
-                {/* Mobile Header */}
-                <header className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-white/5 md:hidden relative z-10 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded bg-violet-600 dark:bg-violet-500 flex items-center justify-center">
-                            <span className="text-white dark:text-slate-950 font-bold font-serif text-sm">L</span>
+                {/* Header (Desktop + Mobile overlay integration if needed) - Here we add global components */}
+                <header className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-white/5 relative z-40 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md">
+                    <div className="flex items-center gap-2 md:hidden">
+                        <Link href="/" className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded bg-violet-600 dark:bg-violet-500 flex items-center justify-center">
+                                <span className="text-white dark:text-slate-950 font-bold font-serif text-sm">L</span>
+                            </div>
+                        </Link>
+                        <button onClick={() => setMobileOpen(true)} className="text-slate-900 dark:text-white" title="Menu">
+                            <Menu className="w-6 h-6" />
+                        </button>
+                    </div>
+                    <div className="hidden md:block" /> {/* spacer for desktop */}
+
+                    {/* Header Right Actions */}
+                    <div className="flex items-center gap-4 relative">
+                        {/* Language Dropdown (Simplified) */}
+                        <div className="flex items-center gap-2">
+                            <Globe className="w-4 h-4 text-slate-500 dark:text-zinc-400" />
+                            <select
+                                value={language}
+                                onChange={(e) => setLanguage(e.target.value)}
+                                className="bg-transparent text-sm font-medium text-slate-700 dark:text-zinc-300 outline-none cursor-pointer"
+                                title="Select Language"
+                            >
+                                <option value="EN">English</option>
+                                <option value="AR">Arabic</option>
+                                <option value="HI">Hindi</option>
+                            </select>
                         </div>
-                    </Link>
-                    <button onClick={() => setMobileOpen(true)} className="text-slate-900 dark:text-white">
-                        <Menu className="w-6 h-6" />
-                    </button>
+
+                        {/* Notifications */}
+                        <div className="relative">
+                            <button
+                                onClick={() => setNotificationsOpen(!notificationsOpen)}
+                                className="relative p-2 text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
+                                title="Notifications"
+                            >
+                                <Bell className="w-5 h-5" />
+                                {unreadCount > 0 && (
+                                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white dark:border-slate-950" />
+                                )}
+                            </button>
+
+                            {/* Notifications Dropdown */}
+                            {notificationsOpen && (
+                                <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl shadow-xl overflow-hidden z-50">
+                                    <div className="p-3 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-black/40 flex items-center justify-between">
+                                        <h4 className="font-bold text-slate-900 dark:text-white text-sm">Notifications</h4>
+                                        <button className="text-xs text-violet-600 dark:text-violet-400 font-medium" onClick={() => setNotifications(notifications.map(n => ({ ...n, unread: false })))}>Mark all read</button>
+                                    </div>
+                                    <div className="max-h-[300px] overflow-y-auto">
+                                        {notifications.length === 0 ? (
+                                            <div className="p-4 text-center text-sm text-slate-500">No notifications</div>
+                                        ) : (
+                                            notifications.map(n => (
+                                                <div key={n.id} className={`p-3 border-b border-slate-100 dark:border-white/5 hover:bg-slate-50 dark:hover:bg-white/[0.02] transition-colors cursor-pointer ${n.unread ? 'bg-violet-50/50 dark:bg-violet-900/10' : ''}`}>
+                                                    <p className={`text-sm ${n.unread ? 'font-medium text-slate-900 dark:text-white' : 'text-slate-600 dark:text-zinc-400'}`}>{n.text}</p>
+                                                    <p className="text-xs text-slate-400 dark:text-zinc-500 mt-1">{n.time}</p>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </header>
 
                 {/* Dashboard Content */}
