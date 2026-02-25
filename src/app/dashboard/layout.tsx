@@ -11,8 +11,9 @@ import {
 import Chatbot from "@/components/ui/Chatbot";
 import { useTheme } from "next-themes";
 import { LanguageProvider, useLanguage, Language } from "@/lib/i18n";
+import { useUserRole } from "@/hooks/useUserRole";
 
-const NAV_ITEMS = [
+const ADMIN_NAV_ITEMS = [
     { href: "/dashboard", label: "Analytics Dashboard", icon: BarChart3 },
     { href: "/dashboard/requests", label: "Access Requests", icon: Users },
     { href: "/dashboard/users", label: "Manage Users", icon: UserCircle2 },
@@ -20,6 +21,13 @@ const NAV_ITEMS = [
     { href: "/dashboard/studio", label: "Course Studio", icon: Video },
     { href: "/dashboard/quiz", label: "Quiz Builder", icon: FileText },
     { href: "/dashboard/evaluations", label: "Evaluations", icon: ClipboardList },
+    { href: "/dashboard/support", label: "Support Center", icon: ShieldAlert },
+    { href: "/dashboard/settings", label: "Settings", icon: Settings },
+];
+
+const USER_NAV_ITEMS = [
+    { href: "/dashboard/courses", label: "My Courses", icon: BookOpen },
+    { href: "/dashboard/evaluations", label: "My Results", icon: ClipboardList },
     { href: "/dashboard/support", label: "Support Center", icon: ShieldAlert },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
@@ -77,6 +85,9 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     ]);
     const unreadCount = notifications.filter(n => n.unread).length;
     const [mounted, setMounted] = useState(false);
+
+    const { isAdmin, role, loading } = useUserRole();
+    const NAV_ITEMS = isAdmin ? ADMIN_NAV_ITEMS : USER_NAV_ITEMS;
 
     useEffect(() => {
         setMounted(true);
@@ -163,12 +174,16 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                     </button>
                     <div className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors">
                         <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-violet-500/30 flex items-center justify-center shrink-0">
-                            <span className="text-slate-700 dark:text-violet-500 text-sm font-bold">AJ</span>
+                            <span className="text-slate-700 dark:text-violet-500 text-sm font-bold">ME</span>
                         </div>
                         {!collapsed && (
                             <div className="w-[140px] overflow-hidden">
-                                <div className="text-slate-900 dark:text-white text-sm font-medium truncate">Admin Jane</div>
-                                <div className="text-slate-500 dark:text-zinc-500 text-xs truncate">Super Admin</div>
+                                <div className="text-slate-900 dark:text-white text-sm font-medium truncate">My Account</div>
+                                {loading ? (
+                                    <div className="w-20 h-3 mt-1 bg-slate-200 dark:bg-white/10 rounded animate-pulse" />
+                                ) : (
+                                    <div className="text-slate-500 dark:text-zinc-500 text-xs truncate capitalize">{role || "User"}</div>
+                                )}
                             </div>
                         )}
                     </div>
