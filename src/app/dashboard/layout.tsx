@@ -8,6 +8,7 @@ import {
     BarChart3, Users, FileText, Video, ClipboardList, ShieldAlert,
     GraduationCap, Settings, Menu, X, ChevronLeft, UserCircle2, BookOpen
 } from "lucide-react";
+import Chatbot from "@/components/ui/Chatbot";
 
 const NAV_ITEMS = [
     { href: "/dashboard", label: "Analytics Dashboard", icon: BarChart3 },
@@ -75,8 +76,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-300 group relative ${isActive
-                                        ? "bg-gold-500/10 text-gold-500 shadow-[inset_4px_0_0_rgba(212,175,55,1)]"
-                                        : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                                    ? "bg-gold-500/10 text-gold-500 shadow-[inset_4px_0_0_rgba(212,175,55,1)]"
+                                    : "text-zinc-400 hover:bg-white/5 hover:text-white"
                                     }`}
                             >
                                 <div className={`shrink-0 ${isActive ? "text-gold-500 transition-colors" : "group-hover:text-gold-400"}`}>
@@ -137,6 +138,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         {children}
                     </motion.div>
                 </div>
+                <Chatbot />
             </main>
         </div>
     );
