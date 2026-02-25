@@ -38,10 +38,17 @@ export default function Login() {
 
             if (userSnap.exists()) {
                 const userData = userSnap.data();
-                if (userData.status === "approved") {
+                const status = (userData.status || "").toLowerCase();
+                const role = (userData.role || "").toLowerCase();
+
+                if (status === "approved" || status === "active" || role === "admin" || role === "super admin") {
+                    // Update status to 'approved' if they are an admin but somehow got stuck in pending
+                    if (status !== "approved" && status !== "active") {
+                        await setDoc(userRef, { status: "approved" }, { merge: true });
+                    }
                     router.push("/dashboard");
-                    return; // Successfully approved and redirected
-                } else if (userData.status === "pending") {
+                    return;
+                } else if (status === "pending") {
                     await signOut(auth);
                     setAuthMessage("Your account is currently pending admin approval. Please wait.");
                 } else {
