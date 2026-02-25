@@ -170,10 +170,10 @@ export default function ManageCourses() {
                                 </div>
                                 <div className="space-y-2 mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
                                     <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Link Global Mandatory Quiz")}</label>
-                                    <select className="w-full bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500/50">
+                                    <select defaultValue="quiz3" className="w-full bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500/50">
                                         <option value="">{t("No Quiz Required")}</option>
                                         <option value="quiz1">{t("Off-Plan Market Assessment")}</option>
-                                        <option value="quiz3" selected>{t("Dubai Real Estate Laws (Mandatory Completion)")}</option>
+                                        <option value="quiz3">{t("Dubai Real Estate Laws (Mandatory Completion)")}</option>
                                     </select>
                                 </div>
                             </div>

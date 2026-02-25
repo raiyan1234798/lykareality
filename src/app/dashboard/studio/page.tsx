@@ -1,7 +1,7 @@
 "use client";
 
-import { Video, Mic, LayoutGrid, MonitorPlay, Save, Plus, FileQuestion, Type, List, Link as LinkIcon, UploadCloud, PlayCircle, MoreVertical, X, Check, FileCheck } from "lucide-react";
-import { useState } from "react";
+import { Video, Mic, LayoutGrid, MonitorPlay, Save, Plus, FileQuestion, Type, List, Link as LinkIcon, UploadCloud, PlayCircle, MoreVertical, X, Check, FileCheck, Trash2, Square } from "lucide-react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 
@@ -19,6 +19,7 @@ type Lesson = {
     type: "video" | "quiz";
     videoSource?: string;
     videoUrl?: string;
+    audioUrl?: string;
     questions?: Question[];
 };
 
@@ -30,6 +31,10 @@ export default function CourseStudio() {
     ]);
     const [selectedLessonId, setSelectedLessonId] = useState<number>(1);
     const [saved, setSaved] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
+
+    const videoUploadRef = useRef<HTMLInputElement>(null);
+    const audioUploadRef = useRef<HTMLInputElement>(null);
 
     const activeLesson = lessons.find(l => l.id === selectedLessonId);
 
@@ -69,6 +74,35 @@ export default function CourseStudio() {
         updateActiveLesson({
             questions: activeLesson.questions.map(q => q.id === qId ? { ...q, ...updates } : q)
         });
+    };
+
+    const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.[0]) {
+            updateActiveLesson({ videoUrl: URL.createObjectURL(e.target.files[0]) });
+        }
+    };
+
+    const handleAudioUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.[0]) {
+            updateActiveLesson({ audioUrl: URL.createObjectURL(e.target.files[0]) });
+        }
+    };
+
+    const toggleRecord = () => {
+        if (isRecording) {
+            setIsRecording(false);
+            updateActiveLesson({ audioUrl: "recorded_audio.wav" });
+        } else {
+            setIsRecording(true);
+        }
+    };
+
+    const deleteLesson = (e: React.MouseEvent, id: number) => {
+        e.stopPropagation();
+        setLessons(lessons.filter(l => l.id !== id));
+        if (selectedLessonId === id) {
+            setSelectedLessonId(lessons.find(l => l.id !== id)?.id || 0);
+        }
     };
 
     return (
@@ -139,14 +173,32 @@ export default function CourseStudio() {
                                         </div>
 
                                         {activeLesson.videoSource === "local" ? (
-                                            <div className="w-full aspect-video bg-slate-50 dark:bg-black/50 rounded-xl border-2 border-dashed border-slate-300 dark:border-white/10 flex flex-col items-center justify-center gap-4 hover:border-violet-500/50 transition-colors cursor-pointer group">
-                                                <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-violet-50 dark:group-hover:bg-violet-500/10 transition-colors">
-                                                    <UploadCloud className="w-8 h-8 text-slate-400 dark:text-zinc-500 group-hover:text-violet-500" />
-                                                </div>
-                                                <div className="text-center">
-                                                    <p className="text-slate-700 dark:text-zinc-300 font-medium">{t("Click to upload or drag files")}</p>
-                                                    <p className="text-sm text-slate-500 dark:text-zinc-500">{t("MP4, WebM up to 2GB")}</p>
-                                                </div>
+                                            <div
+                                                className="w-full aspect-video bg-slate-50 dark:bg-black/50 rounded-xl border-2 border-dashed border-slate-300 dark:border-white/10 flex flex-col items-center justify-center gap-4 hover:border-violet-500/50 transition-colors cursor-pointer group relative overflow-hidden"
+                                                onClick={() => !activeLesson.videoUrl && videoUploadRef.current?.click()}
+                                            >
+                                                <input type="file" accept="video/*" className="hidden" ref={videoUploadRef} onChange={handleVideoUpload} />
+                                                {activeLesson.videoUrl ? (
+                                                    <>
+                                                        <video src={activeLesson.videoUrl} className="w-full h-full object-cover bg-black" controls />
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); updateActiveLesson({ videoUrl: "" }); }}
+                                                            className="absolute top-4 right-4 bg-rose-500/80 text-white p-2 rounded-lg hover:bg-rose-600 transition-colors backdrop-blur-md z-10"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center group-hover:bg-violet-50 dark:group-hover:bg-violet-500/10 transition-colors">
+                                                            <UploadCloud className="w-8 h-8 text-slate-400 dark:text-zinc-500 group-hover:text-violet-500" />
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <p className="text-slate-700 dark:text-zinc-300 font-medium">{t("Click to upload or drag files")}</p>
+                                                            <p className="text-sm text-slate-500 dark:text-zinc-500">{t("MP4, WebM up to 2GB")}</p>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
                                         ) : (
                                             <div className="w-full aspect-video bg-slate-50 dark:bg-black/50 rounded-xl border border-slate-200 dark:border-white/10 flex flex-col items-center justify-center p-8 gap-4 shadow-inner">
@@ -175,22 +227,55 @@ export default function CourseStudio() {
                                                 <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t("Voiceover & Audio Option")}</h2>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <button className="px-4 py-1.5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                                <input type="file" accept="audio/*" className="hidden" ref={audioUploadRef} onChange={handleAudioUpload} />
+                                                <button onClick={() => audioUploadRef.current?.click()} className="px-4 py-1.5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
                                                     <UploadCloud className="w-4 h-4" /> {t("Upload Audio")}
                                                 </button>
-                                                <button className="px-4 py-1.5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" /> {t("Record")}
+                                                <button onClick={toggleRecord} className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${isRecording ? 'bg-rose-500 text-white hover:bg-rose-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20'}`}>
+                                                    {isRecording ? <Square className="w-3 h-3 fill-current" /> : <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
+                                                    {isRecording ? t("Stop") : t("Record")}
                                                 </button>
                                             </div>
                                         </div>
                                         <div className="h-28 bg-slate-50 dark:bg-black/50 rounded-xl border border-slate-200 dark:border-white/10 flex items-center justify-center shadow-inner relative overflow-hidden">
-                                            {/* Mock audio wave */}
-                                            <div className="absolute inset-0 flex items-center px-4 gap-1 opacity-20">
-                                                {[...Array(50)].map((_, i) => (
-                                                    <div key={i} className="flex-1 bg-violet-500 rounded-full" style={{ height: `${Math.random() * 60 + 10}%` }} />
-                                                ))}
-                                            </div>
-                                            <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium z-10 bg-white/50 dark:bg-black/50 px-3 py-1 rounded backdrop-blur-sm">{t("Audio timeline (Optional)")}</p>
+                                            {isRecording && (
+                                                <div className="absolute inset-0 flex items-center px-4 gap-1 opacity-60">
+                                                    {[...Array(50)].map((_, i) => (
+                                                        <motion.div
+                                                            key={i}
+                                                            animate={{ height: ['20%', '100%', '20%'] }}
+                                                            transition={{ duration: 0.5 + Math.random() * 0.5, repeat: Infinity, ease: "easeInOut" }}
+                                                            className="flex-1 bg-rose-500 rounded-full"
+                                                        />
+                                                    ))}
+                                                </div>
+                                            )}
+                                            {!isRecording && activeLesson.audioUrl && (
+                                                <div className="absolute inset-0 flex items-center justify-between px-6 bg-violet-500/10 backdrop-blur-sm">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-10 h-10 rounded-full bg-violet-600 text-white flex items-center justify-center shadow-md">
+                                                            <PlayCircle className="w-5 h-5 ml-0.5" />
+                                                        </div>
+                                                        <div className="space-y-1">
+                                                            <p className="text-sm font-bold text-slate-900 dark:text-white">Voiceover Track</p>
+                                                            <p className="text-xs text-slate-500 dark:text-zinc-400">Ready to play</p>
+                                                        </div>
+                                                    </div>
+                                                    <button onClick={() => updateActiveLesson({ audioUrl: "" })} className="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
+                                                </div>
+                                            )}
+                                            {!isRecording && !activeLesson.audioUrl && (
+                                                <>
+                                                    <div className="absolute inset-0 flex items-center px-4 gap-1 opacity-20">
+                                                        {[...Array(50)].map((_, i) => (
+                                                            <div key={i} className="flex-1 bg-violet-500 rounded-full" style={{ height: `${Math.random() * 60 + 10}%` }} />
+                                                        ))}
+                                                    </div>
+                                                    <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium z-10 bg-white/50 dark:bg-black/50 px-3 py-1 rounded backdrop-blur-sm">{t("Audio timeline (Optional)")}</p>
+                                                </>
+                                            )}
                                         </div>
                                     </div>
                                 </>
@@ -316,7 +401,9 @@ export default function CourseStudio() {
                                             </div>
                                         </div>
                                     </div>
-                                    <MoreVertical className={`w-4 h-4 shrink-0 ${selectedLessonId === item.id ? 'text-violet-500' : 'text-slate-400 dark:text-zinc-600'}`} />
+                                    <button onClick={(e) => deleteLesson(e, item.id)} className={`p-2 rounded-lg transition-colors ${selectedLessonId === item.id ? 'hover:bg-violet-100 dark:hover:bg-violet-800/50 text-rose-500' : 'hover:bg-rose-50 dark:hover:bg-rose-500/10 text-slate-400 dark:text-zinc-600 hover:text-rose-500'}`}>
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
                                 </motion.div>
                             ))}
 
