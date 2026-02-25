@@ -4,6 +4,7 @@ import { Plus, BookOpen, Star, Clock, X, Lock, CheckCircle, Video, PlayCircle, E
 import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 
 type Course = {
     id: number;
@@ -15,6 +16,7 @@ type Course = {
 };
 
 export default function ManageCourses() {
+    const { t } = useLanguage();
     const [courses, setCourses] = useState<Course[]>([
         { id: 1, title: "Luxury Closing Techniques", modules: 12, rating: 4.9, time: "3h 45m", active: true },
         { id: 2, title: "Off-Plan Masterclass", modules: 8, rating: 4.8, time: "2h 30m", active: true },
@@ -59,12 +61,12 @@ export default function ManageCourses() {
         <div className="space-y-6">
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Manage Courses</h1>
-                    <p className="text-slate-500 dark:text-zinc-400 transition-colors">Create, edit, and organize training modules.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Manage Courses")}</h1>
+                    <p className="text-slate-500 dark:text-zinc-400 transition-colors">{t("Create, edit, and organize training modules.")}</p>
                 </div>
                 <Link href="/dashboard/studio" className="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all">
                     <Plus className="w-4 h-4" />
-                    New Course
+                    {t("New Course")}
                 </Link>
             </header>
 
@@ -86,24 +88,24 @@ export default function ManageCourses() {
                                 className={`absolute top-4 right-4 z-20 px-3 py-1.5 rounded-md font-medium text-xs transition-colors cursor-pointer flex items-center gap-1.5 backdrop-blur-md ${course.active ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/20 border" : "bg-amber-500/10 border-amber-500/20 text-amber-600 hover:bg-amber-500/20 border"}`}
                             >
                                 <span className={`w-1.5 h-1.5 rounded-full ${course.active ? "bg-emerald-500" : "bg-amber-500"}`} />
-                                {course.active ? "Published" : "Draft"}
+                                {course.active ? t("Published") : t("Draft")}
                             </button>
                         </div>
                         <div className="p-5 flex-1 flex flex-col justify-between">
                             <div>
-                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-1">{course.title}</h3>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-1">{t(course.title)}</h3>
                                 <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-zinc-400 mb-4 transition-colors">
-                                    <div className="flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" />{course.modules} Mods</div>
+                                    <div className="flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" />{course.modules} {t("Mods")}</div>
                                     <div className="flex items-center gap-1"><Star className="w-3.5 h-3.5 text-violet-500" />{course.rating}</div>
                                     <div className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{course.time}</div>
                                 </div>
                             </div>
                             <div className="flex gap-2">
                                 <button onClick={() => setEditingCourse(course)} className="flex-1 py-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-800 dark:text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1">
-                                    <Edit3 className="w-3.5 h-3.5" /> Edit
+                                    <Edit3 className="w-3.5 h-3.5" /> {t("Edit")}
                                 </button>
                                 <button onClick={() => setAccessCourse(course)} className="flex-1 py-1.5 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-800 dark:text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-1">
-                                    <Lock className="w-3.5 h-3.5" /> Access
+                                    <Lock className="w-3.5 h-3.5" /> {t("Access")}
                                 </button>
                             </div>
                         </div>
@@ -139,8 +141,8 @@ export default function ManageCourses() {
                                             <div key={node.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-lg">
                                                 <div className="flex items-center gap-3">
                                                     <span className={`text-xs font-bold px-2 py-1 rounded uppercase tracking-wider ${node.type === 'module' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400' :
-                                                            node.type === 'lesson' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400' :
-                                                                'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
+                                                        node.type === 'lesson' ? 'bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400' :
+                                                            'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
                                                         }`}>
                                                         {node.type}
                                                     </span>

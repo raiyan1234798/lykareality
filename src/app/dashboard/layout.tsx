@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Chatbot from "@/components/ui/Chatbot";
 import { useTheme } from "next-themes";
+import { LanguageProvider, useLanguage, Language } from "@/lib/i18n";
 
 const NAV_ITEMS = [
     { href: "/dashboard", label: "Analytics Dashboard", icon: BarChart3 },
@@ -67,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const { theme, setTheme } = useTheme();
-    const [language, setLanguage] = useState("EN");
+    const { language, setLanguage, t } = useLanguage();
     const [notificationsOpen, setNotificationsOpen] = useState(false);
     const [notifications, setNotifications] = useState([
         { id: 1, text: "New completely access request from Sarah", time: "2m ago", unread: true },
@@ -118,7 +119,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     {NAV_ITEMS.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
-                        const translatedLabel = TRANSLATIONS[language]?.[item.label] || item.label;
+                        const translatedLabel = t(item.label);
 
                         return (
                             <Link
@@ -153,7 +154,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         title="Toggle Light/Dark Theme"
                     >
                         {theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <Moon className="w-5 h-5 shrink-0" />}
-                        {!collapsed && <span className="text-sm font-medium">{TRANSLATIONS[language]?.["Toggle Theme"] || "Toggle Theme"}</span>}
+                        {!collapsed && <span className="text-sm font-medium">{t("Toggle Theme")}</span>}
                     </button>
                     <div className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors">
                         <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-violet-500/30 flex items-center justify-center shrink-0">
@@ -194,7 +195,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Globe className="w-4 h-4 text-slate-500 dark:text-zinc-400" />
                             <select
                                 value={language}
-                                onChange={(e) => setLanguage(e.target.value)}
+                                onChange={(e) => setLanguage(e.target.value as Language)}
                                 className="bg-transparent text-sm font-medium text-slate-700 dark:text-zinc-300 outline-none cursor-pointer"
                                 title="Select Language"
                             >
@@ -244,16 +245,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
                 {/* Dashboard Content */}
                 <div className="flex-1 overflow-y-auto w-full relative z-10 custom-scrollbar p-4 md:p-8 lg:p-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                    >
-                        {children}
-                    </motion.div>
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={pathname}
+                            initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            exit={{ opacity: 0, scale: 0.98, filter: "blur(4px)" }}
+                            transition={{ duration: 0.4, ease: "easeOut" }}
+                        >
+                            {children}
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
                 <Chatbot />
             </main>
         </div>
+    );
+}
+
+// Wrapper to provide language context to the layout
+export default function DashboardLayoutWrapper({ children }: { children: React.ReactNode }) {
+    return (
+        <LanguageProvider>
+            <DashboardLayout>{children}</DashboardLayout>
+        </LanguageProvider>
     );
 }
