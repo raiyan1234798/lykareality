@@ -1,7 +1,7 @@
 "use client";
 
 import { Video, Mic, LayoutGrid, MonitorPlay, Save, Plus, FileQuestion, Type, List, Link as LinkIcon, UploadCloud, PlayCircle, MoreVertical, X, Check, FileCheck, Trash2, Square } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 
@@ -35,6 +35,27 @@ export default function CourseStudio() {
 
     const videoUploadRef = useRef<HTMLInputElement>(null);
     const audioUploadRef = useRef<HTMLInputElement>(null);
+
+    // Deterministic waveform heights to avoid SSR hydration mismatch from Math.random()
+    const waveHeights = useMemo(() => {
+        const heights: number[] = [];
+        let seed = 42;
+        for (let i = 0; i < 50; i++) {
+            seed = (seed * 16807 + 0) % 2147483647;
+            heights.push((seed % 60) + 10);
+        }
+        return heights;
+    }, []);
+
+    const recordingDurations = useMemo(() => {
+        const durations: number[] = [];
+        let seed = 123;
+        for (let i = 0; i < 50; i++) {
+            seed = (seed * 16807 + 0) % 2147483647;
+            durations.push(0.5 + (seed % 500) / 1000);
+        }
+        return durations;
+    }, []);
 
     const activeLesson = lessons.find(l => l.id === selectedLessonId);
 
@@ -244,7 +265,7 @@ export default function CourseStudio() {
                                                         <motion.div
                                                             key={i}
                                                             animate={{ height: ['20%', '100%', '20%'] }}
-                                                            transition={{ duration: 0.5 + Math.random() * 0.5, repeat: Infinity, ease: "easeInOut" }}
+                                                            transition={{ duration: recordingDurations[i], repeat: Infinity, ease: "easeInOut" }}
                                                             className="flex-1 bg-rose-500 rounded-full"
                                                         />
                                                     ))}
@@ -270,7 +291,7 @@ export default function CourseStudio() {
                                                 <>
                                                     <div className="absolute inset-0 flex items-center px-4 gap-1 opacity-20">
                                                         {[...Array(50)].map((_, i) => (
-                                                            <div key={i} className="flex-1 bg-violet-500 rounded-full" style={{ height: `${Math.random() * 60 + 10}%` }} />
+                                                            <div key={i} className="flex-1 bg-violet-500 rounded-full" style={{ height: `${waveHeights[i]}%` }} />
                                                         ))}
                                                     </div>
                                                     <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium z-10 bg-white/50 dark:bg-black/50 px-3 py-1 rounded backdrop-blur-sm">{t("Audio timeline (Optional)")}</p>
