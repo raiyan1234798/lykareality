@@ -6,9 +6,10 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
     BarChart3, Users, FileText, Video, ClipboardList, ShieldAlert,
-    GraduationCap, Settings, Menu, X, ChevronLeft, UserCircle2, BookOpen
+    Settings, Menu, X, ChevronLeft, UserCircle2, BookOpen, Moon, Sun
 } from "lucide-react";
 import Chatbot from "@/components/ui/Chatbot";
+import { useTheme } from "next-themes";
 
 const NAV_ITEMS = [
     { href: "/dashboard", label: "Analytics Dashboard", icon: BarChart3 },
@@ -18,7 +19,6 @@ const NAV_ITEMS = [
     { href: "/dashboard/studio", label: "Course Studio", icon: Video },
     { href: "/dashboard/quiz", label: "Quiz Builder", icon: FileText },
     { href: "/dashboard/evaluations", label: "Evaluations", icon: ClipboardList },
-    { href: "/dashboard/certifications", label: "Certifications", icon: GraduationCap },
     { href: "/dashboard/support", label: "Support Center", icon: ShieldAlert },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
@@ -27,6 +27,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const pathname = usePathname();
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { theme, setTheme } = useTheme();
 
     return (
         <div className="min-h-screen bg-slate-950 flex overflow-hidden">
@@ -96,16 +97,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     })}
                 </div>
 
-                {/* User Info / Profile */}
-                <div className="p-4 border-t border-white/5 shrink-0 bg-slate-950/20">
-                    <div className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-white/5 p-2 transition-colors">
-                        <div className="w-10 h-10 rounded-full bg-slate-900 border border-violet-500/30 flex items-center justify-center shrink-0">
-                            <span className="text-violet-500 text-sm font-bold">AJ</span>
+                {/* User Info / Profile & Theme Toggle */}
+                <div className="p-4 border-t border-slate-200 dark:border-white/5 shrink-0 bg-slate-50 dark:bg-slate-950/20 flex flex-col gap-3">
+                    <button
+                        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                        className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                        title="Toggle Light/Dark Theme"
+                    >
+                        {theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <Moon className="w-5 h-5 shrink-0" />}
+                        {!collapsed && <span className="text-sm font-medium">Toggle Theme</span>}
+                    </button>
+                    <div className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors">
+                        <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-violet-500/30 flex items-center justify-center shrink-0">
+                            <span className="text-slate-700 dark:text-violet-500 text-sm font-bold">AJ</span>
                         </div>
                         {!collapsed && (
                             <div className="hidden md:block w-[140px] overflow-hidden">
-                                <div className="text-white text-sm font-medium truncate">Admin Jane</div>
-                                <div className="text-zinc-500 text-xs truncate">Super Admin</div>
+                                <div className="text-slate-900 dark:text-white text-sm font-medium truncate">Admin Jane</div>
+                                <div className="text-slate-500 dark:text-zinc-500 text-xs truncate">Super Admin</div>
                             </div>
                         )}
                     </div>
@@ -113,17 +122,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </motion.aside>
 
             {/* Main Content Area */}
-            <main className="flex-1 flex flex-col h-screen overflow-hidden bg-[#0A0A0B] relative">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-950/20 via-slate-950 to-slate-950 z-0 pointer-events-none" />
+            <main className="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50 dark:bg-[#0A0A0B] relative transition-colors">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-200 via-slate-50 to-slate-50 dark:from-slate-950/20 dark:via-slate-950 dark:to-slate-950 z-0 pointer-events-none transition-colors" />
 
                 {/* Mobile Header */}
-                <header className="h-16 flex items-center justify-between px-4 border-b border-white/5 md:hidden relative z-10 bg-slate-950/50 backdrop-blur-md">
+                <header className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-white/5 md:hidden relative z-10 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md">
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded bg-violet-500 flex items-center justify-center">
-                            <span className="text-slate-950 font-bold font-serif text-sm">L</span>
+                        <div className="w-8 h-8 rounded bg-violet-600 dark:bg-violet-500 flex items-center justify-center">
+                            <span className="text-white dark:text-slate-950 font-bold font-serif text-sm">L</span>
                         </div>
                     </Link>
-                    <button onClick={() => setMobileOpen(true)} className="text-white">
+                    <button onClick={() => setMobileOpen(true)} className="text-slate-900 dark:text-white">
                         <Menu className="w-6 h-6" />
                     </button>
                 </header>
