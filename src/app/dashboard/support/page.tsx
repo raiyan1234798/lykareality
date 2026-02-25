@@ -3,11 +3,13 @@
 import { Headphones, LifeBuoy, Mail, MessageCircle, Send, UserCircle, Search } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 
 type Message = { id: number; text: string; sender: "user" | "admin"; time: string };
 type Ticket = { id: number; userName: string; unread: boolean; preview: string; messages: Message[] };
 
 export default function SupportCenter() {
+    const { t } = useLanguage();
     const [viewMode, setViewMode] = useState<"admin" | "user">("admin");
     const [tickets, setTickets] = useState<Ticket[]>([
         {
@@ -88,21 +90,21 @@ export default function SupportCenter() {
         <div className="space-y-6 h-full flex flex-col">
             <header className="mb-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Support Center</h1>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Support Center")}</h1>
                     <p className="text-slate-500 dark:text-zinc-400">
-                        {viewMode === "admin" ? "Respond to trainee and consultant support requests." : "Get help with your Lykaa Academy account."}
+                        {viewMode === "admin" ? t("Respond to trainee and consultant support requests.") : t("Get help with your Lykaa Academy account.")}
                     </p>
                 </div>
                 <div className="flex gap-3">
                     {/* View Toggle for Mocking purposes */}
                     <div className="bg-slate-200 dark:bg-white/10 p-1 rounded-lg flex text-sm font-medium">
-                        <button onClick={() => setViewMode('user')} className={`px-4 py-1.5 rounded-md transition-colors ${viewMode === 'user' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}>User View</button>
-                        <button onClick={() => setViewMode('admin')} className={`px-4 py-1.5 rounded-md transition-colors ${viewMode === 'admin' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}>Admin View</button>
+                        <button onClick={() => setViewMode('user')} className={`px-4 py-1.5 rounded-md transition-colors ${viewMode === 'user' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}>{t("User View")}</button>
+                        <button onClick={() => setViewMode('admin')} className={`px-4 py-1.5 rounded-md transition-colors ${viewMode === 'admin' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-zinc-400 hover:text-slate-700 dark:hover:text-zinc-200'}`}>{t("Admin View")}</button>
                     </div>
 
                     {viewMode === "user" && (
                         <button onClick={() => setNewTicketModal(true)} className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                            + New Ticket
+                            {t("+ New Ticket")}
                         </button>
                     )}
                 </div>
@@ -117,7 +119,7 @@ export default function SupportCenter() {
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-zinc-500" />
                             <input
                                 type="text"
-                                placeholder={viewMode === "admin" ? "Search consultants..." : "Search your tickets..."}
+                                placeholder={viewMode === "admin" ? t("Search consultants...") : t("Search your tickets...")}
                                 className="w-full bg-slate-100 dark:bg-black/40 border border-slate-300 dark:border-white/10 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-violet-500"
                             />
                         </div>
@@ -151,7 +153,7 @@ export default function SupportCenter() {
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-slate-900 dark:text-white">{activeTicket.userName}</h3>
-                                        <p className="text-xs text-emerald-600 dark:text-emerald-500 font-medium">Consultant</p>
+                                        <p className="text-xs text-emerald-600 dark:text-emerald-500 font-medium">{t("Consultant")}</p>
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +180,7 @@ export default function SupportCenter() {
                                         type="text"
                                         value={reply}
                                         onChange={(e) => setReply(e.target.value)}
-                                        placeholder={viewMode === "admin" ? "Type your reply to user..." : "Type your message to support..."}
+                                        placeholder={viewMode === "admin" ? t("Type your reply to user...") : t("Type your message to support...")}
                                         className="w-full bg-white dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-full pl-5 pr-14 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-violet-500 shadow-inner"
                                     />
                                     <button
@@ -194,7 +196,7 @@ export default function SupportCenter() {
                     ) : (
                         <div className="flex-1 flex flex-col items-center justify-center text-slate-500 dark:text-zinc-500 h-full">
                             <MessageCircle className="w-12 h-12 mb-4 opacity-20" />
-                            <p className="font-medium">Select a conversation to reply</p>
+                            <p className="font-medium">{t("Select a conversation to reply")}</p>
                         </div>
                     )}
                 </div>
@@ -206,25 +208,25 @@ export default function SupportCenter() {
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm">
                     <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10">
                         <div className="p-6 border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50">
-                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">Create Support Ticket</h3>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">{t("Create Support Ticket")}</h3>
                         </div>
                         <form onSubmit={handleNewTicket}>
                             <div className="p-6 space-y-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">How can we help?</label>
+                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("How can we help?")}</label>
                                     <textarea
                                         rows={4}
                                         autoFocus
                                         value={newTicketMessage}
                                         onChange={(e) => setNewTicketMessage(e.target.value)}
-                                        placeholder="Describe your issue in detail..."
+                                        placeholder={t("Describe your issue in detail...")}
                                         className="w-full bg-slate-50 dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-violet-500"
                                     />
                                 </div>
                             </div>
                             <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3">
-                                <button type="button" onClick={() => setNewTicketModal(false)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors">Cancel</button>
-                                <button type="submit" disabled={!newTicketMessage.trim()} className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50">Create Ticket</button>
+                                <button type="button" onClick={() => setNewTicketModal(false)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors">{t("Cancel")}</button>
+                                <button type="submit" disabled={!newTicketMessage.trim()} className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50">{t("Create Ticket")}</button>
                             </div>
                         </form>
                     </div>

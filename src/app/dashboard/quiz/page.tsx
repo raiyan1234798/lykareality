@@ -3,6 +3,7 @@
 import { CheckSquare, ListPlus, Edit3, Settings, Trash2, X, Plus } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 
 type Quiz = {
     id: number;
@@ -14,6 +15,7 @@ type Quiz = {
 };
 
 export default function QuizBuilder() {
+    const { t } = useLanguage();
     const [quizzes, setQuizzes] = useState<Quiz[]>([
         { id: 1, title: "Off-Plan Market Assessment", questions: 25, time: "45 mins", difficulty: "Advanced", assignedTo: "Module 2: Off-Plan Strategies" },
         { id: 2, title: "Client Qualification Basics", questions: 10, time: "15 mins", difficulty: "Beginner", assignedTo: "Module 1: Getting Started" },
@@ -68,15 +70,15 @@ export default function QuizBuilder() {
         <div className="space-y-6">
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Quiz Builder</h1>
-                    <p className="text-slate-500 dark:text-zinc-400">Design assessments to evaluate consultant knowledge.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Quiz Builder")}</h1>
+                    <p className="text-slate-500 dark:text-zinc-400">{t("Design assessments to evaluate consultant knowledge.")}</p>
                 </div>
                 <button
                     onClick={handleCreateOpen}
                     className="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all"
                 >
                     <ListPlus className="w-4 h-4" />
-                    Create Quiz
+                    {t("Create Quiz")}
                 </button>
             </header>
 
@@ -84,9 +86,9 @@ export default function QuizBuilder() {
                 {quizzes.length === 0 && (
                     <div className="col-span-1 lg:col-span-2 text-center py-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl flex flex-col items-center">
                         <CheckSquare className="w-12 h-12 text-slate-300 dark:text-slate-700 mb-3" />
-                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">No Quizzes Found</h3>
-                        <p className="text-slate-500 dark:text-zinc-400 mt-1 max-w-sm">Create your first assessment to start evaluating members.</p>
-                        <button onClick={handleCreateOpen} className="mt-4 text-violet-600 hover:text-violet-700 font-medium">+ Add New Quiz</button>
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t("No Quizzes Found")}</h3>
+                        <p className="text-slate-500 dark:text-zinc-400 mt-1 max-w-sm">{t("Create your first assessment to start evaluating members.")}</p>
+                        <button onClick={handleCreateOpen} className="mt-4 text-violet-600 hover:text-violet-700 font-medium">{t("+ Add New Quiz")}</button>
                     </div>
                 )}
                 {quizzes.map((quiz, idx) => (
@@ -114,11 +116,11 @@ export default function QuizBuilder() {
                                     </button>
                                 </div>
                             </div>
-                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-1">{quiz.title}</h3>
+                            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors line-clamp-1">{t(quiz.title)}</h3>
                         </div>
                         <div className="space-y-4">
                             <div className="text-xs font-medium text-slate-500 dark:text-zinc-400 bg-slate-50 dark:bg-black/20 p-2.5 rounded-lg border border-slate-100 dark:border-white/5">
-                                Assigned to: <span className="text-slate-800 dark:text-zinc-200">{quiz.assignedTo}</span>
+                                {t("Assigned to:")} <span className="text-slate-800 dark:text-zinc-200">{t(quiz.assignedTo)}</span>
                             </div>
                             <div className="flex gap-4 text-sm text-slate-500 dark:text-zinc-400 pt-4 border-t border-slate-100 dark:border-white/5 justify-between">
                                 <div className="flex gap-4">
@@ -126,7 +128,7 @@ export default function QuizBuilder() {
                                     <div>&bull;</div>
                                     <div>{quiz.time}</div>
                                 </div>
-                                <div className="text-violet-600 dark:text-violet-400 font-medium">{quiz.difficulty}</div>
+                                <div className="text-violet-600 dark:text-violet-400 font-medium">{t(quiz.difficulty)}</div>
                             </div>
                         </div>
                     </motion.div>
@@ -146,7 +148,7 @@ export default function QuizBuilder() {
                             <div className="p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-950/50">
                                 <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                     {isEditing ? <Settings className="text-violet-500 w-5 h-5" /> : <ListPlus className="text-violet-500 w-5 h-5" />}
-                                    {isEditing ? "Quiz Settings" : "Create New Quiz"}
+                                    {isEditing ? t("Quiz Settings") : t("Create New Quiz")}
                                 </h3>
                                 <button onClick={() => { setIsEditing(null); setIsCreating(false); }} title="Close Modal" className="text-slate-400 hover:text-slate-900 dark:text-zinc-500 dark:hover:text-white transition-colors">
                                     <X className="w-5 h-5" />
@@ -155,7 +157,7 @@ export default function QuizBuilder() {
                             <form onSubmit={handleSave}>
                                 <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">Quiz Title</label>
+                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Quiz Title")}</label>
                                         <input
                                             type="text"
                                             required
@@ -166,7 +168,7 @@ export default function QuizBuilder() {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">Assign to specific Module or Lesson</label>
+                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Assign to specific Module or Lesson")}</label>
                                         <select
                                             value={assignedTo}
                                             onChange={(e) => setAssignedTo(e.target.value)}
@@ -184,7 +186,7 @@ export default function QuizBuilder() {
 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">Total Time Limit</label>
+                                            <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Total Time Limit")}</label>
                                             <select
                                                 value={time}
                                                 onChange={(e) => setTime(e.target.value)}
@@ -198,7 +200,7 @@ export default function QuizBuilder() {
                                             </select>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">Difficulty Level</label>
+                                            <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Difficulty Level")}</label>
                                             <select
                                                 value={difficulty}
                                                 onChange={(e) => setDifficulty(e.target.value)}
@@ -212,7 +214,7 @@ export default function QuizBuilder() {
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">Estimated Question Count</label>
+                                        <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Estimated Question Count")}</label>
                                         <input
                                             type="number"
                                             value={questions}
@@ -222,9 +224,9 @@ export default function QuizBuilder() {
                                     </div>
                                 </div>
                                 <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3">
-                                    <button type="button" onClick={() => { setIsEditing(null); setIsCreating(false); }} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">Cancel</button>
+                                    <button type="button" onClick={() => { setIsEditing(null); setIsCreating(false); }} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">{t("Cancel")}</button>
                                     <button type="submit" className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors">
-                                        {isEditing ? "Save Settings" : "Create Quiz"}
+                                        {isEditing ? t("Save Settings") : t("Create Quiz")}
                                     </button>
                                 </div>
                             </form>

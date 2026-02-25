@@ -5,13 +5,15 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "@/lib/firebase";
+import { signInWithPopup, signOut } from "firebase/auth";
+import { auth, googleProvider, db } from "@/lib/firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [authMessage, setAuthMessage] = useState("");
     const router = useRouter();
 
     const handleLogin = (e: React.FormEvent) => {
@@ -25,12 +27,44 @@ export default function Login() {
 
     const handleGoogleLogin = async () => {
         setIsLoading(true);
+        setAuthMessage("");
         try {
-            await signInWithPopup(auth, googleProvider);
-            router.push("/dashboard");
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
+
+            // Check if user exists in Firestore
+            const userRef = doc(db, "users", user.uid);
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+                const userData = userSnap.data();
+                if (userData.status === "approved") {
+                    router.push("/dashboard");
+                    return; // Successfully approved and redirected
+                } else if (userData.status === "pending") {
+                    await signOut(auth);
+                    setAuthMessage("Your account is currently pending admin approval. Please wait.");
+                } else {
+                    await signOut(auth);
+                    setAuthMessage("Your account has been restricted.");
+                }
+            } else {
+                // New user - create a pending request
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    name: user.displayName || "New User",
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    role: "User",
+                    status: "pending",
+                    createdAt: serverTimestamp()
+                });
+                await signOut(auth);
+                setAuthMessage("Access requested successfully! Please wait for admin approval.");
+            }
         } catch (error) {
             console.error("Google login failed", error);
-            alert("Google login failed. Please try again.");
+            setAuthMessage("Google login failed. Please try again.");
         } finally {
             setIsLoading(false);
         }
@@ -144,6 +178,12 @@ export default function Login() {
                         </svg>
                         Continue with Google
                     </button>
+
+                    {authMessage && (
+                        <div className="mt-4 p-3 bg-violet-500/10 border border-violet-500/20 rounded-lg text-center text-sm text-violet-400">
+                            {authMessage}
+                        </div>
+                    )}
                 </form>
 
                 <div className="mt-8 pt-6 border-t border-white/5 text-center px-4">

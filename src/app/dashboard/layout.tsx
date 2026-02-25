@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     BarChart3, Users, FileText, Video, ClipboardList, ShieldAlert,
     Settings, Menu, X, ChevronLeft, UserCircle2, BookOpen, Moon, Sun, Globe, Bell
@@ -76,6 +76,11 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
         { id: 3, text: "Course Off-Plan updated successfully", time: "2h ago", unread: false },
     ]);
     const unreadCount = notifications.filter(n => n.unread).length;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 flex overflow-hidden">
@@ -153,7 +158,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                         className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
                         title="Toggle Light/Dark Theme"
                     >
-                        {theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <Moon className="w-5 h-5 shrink-0" />}
+                        {mounted && theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <Moon className="w-5 h-5 shrink-0" />}
                         {!collapsed && <span className="text-sm font-medium">{t("Toggle Theme")}</span>}
                     </button>
                     <div className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors">

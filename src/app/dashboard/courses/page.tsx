@@ -126,7 +126,7 @@ export default function ManageCourses() {
                             <div className="p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-950/50">
                                 <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                     <Video className="text-violet-500 w-5 h-5" />
-                                    Edit Course Structure: {editingCourse.title}
+                                    {t("Edit Course Structure:")} {t(editingCourse.title)}
                                 </h3>
                                 <button onClick={() => setEditingCourse(null)} className="text-slate-400 hover:text-slate-900 dark:text-zinc-500 dark:hover:text-white transition-colors">
                                     <X className="w-5 h-5" />
@@ -135,7 +135,7 @@ export default function ManageCourses() {
                             <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
 
                                 <div className="space-y-3">
-                                    <h4 className="font-bold text-slate-900 dark:text-white">Curriculum</h4>
+                                    <h4 className="font-bold text-slate-900 dark:text-white">{t("Curriculum")}</h4>
                                     <div className="bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-4 space-y-2">
                                         {structureNodes.map((node) => (
                                             <div key={node.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/5 rounded-lg">
@@ -160,26 +160,26 @@ export default function ManageCourses() {
                                         ))}
                                     </div>
                                     <div className="flex flex-wrap gap-2">
-                                        <button onClick={() => addNode('module')} className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 rounded-md text-xs font-medium transition-colors flex items-center gap-1">+ Add Module</button>
-                                        <button onClick={() => addNode('lesson')} className="px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-md text-xs font-medium transition-colors flex items-center gap-1">+ Add Lesson</button>
-                                        <button onClick={() => addNode('quiz')} className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 rounded-md text-xs font-medium transition-colors flex items-center gap-1">+ Add Quiz</button>
+                                        <button onClick={() => addNode('module')} className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 rounded-md text-xs font-medium transition-colors flex items-center gap-1">+ {t("Add Module")}</button>
+                                        <button onClick={() => addNode('lesson')} className="px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-md text-xs font-medium transition-colors flex items-center gap-1">+ {t("Add Lesson")}</button>
+                                        <button onClick={() => addNode('quiz')} className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 rounded-md text-xs font-medium transition-colors flex items-center gap-1">+ {t("Add Quiz")}</button>
                                         <Link href="/dashboard/studio" className="px-3 py-1.5 bg-violet-600 text-white rounded-md text-xs font-medium hover:bg-violet-700 transition-colors flex items-center gap-1 ml-auto">
-                                            Open in Course Studio
+                                            {t("Open in Course Studio")}
                                         </Link>
                                     </div>
                                 </div>
                                 <div className="space-y-2 mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
-                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">Link Global Mandatory Quiz</label>
+                                    <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Link Global Mandatory Quiz")}</label>
                                     <select className="w-full bg-slate-50 dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500/50">
-                                        <option value="">No Quiz Required</option>
-                                        <option value="quiz1">Off-Plan Market Assessment</option>
-                                        <option value="quiz3" selected>Dubai Real Estate Laws (Mandatory Completion)</option>
+                                        <option value="">{t("No Quiz Required")}</option>
+                                        <option value="quiz1">{t("Off-Plan Market Assessment")}</option>
+                                        <option value="quiz3" selected>{t("Dubai Real Estate Laws (Mandatory Completion)")}</option>
                                     </select>
                                 </div>
                             </div>
                             <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3">
-                                <button onClick={() => setEditingCourse(null)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors">Cancel</button>
-                                <button onClick={() => setEditingCourse(null)} className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors">Save Changes</button>
+                                <button onClick={() => setEditingCourse(null)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors">{t("Cancel")}</button>
+                                <button onClick={() => setEditingCourse(null)} className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors">{t("Save Changes")}</button>
                             </div>
                         </motion.div>
                     </div>
@@ -199,7 +199,7 @@ export default function ManageCourses() {
                             <div className="p-6 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-slate-50 dark:bg-slate-950/50">
                                 <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                     <Lock className="text-violet-500 w-5 h-5" />
-                                    Manage Access: {accessCourse.title}
+                                    {t("Manage Access:")} {t(accessCourse.title)}
                                 </h3>
                                 <button onClick={() => setAccessCourse(null)} className="text-slate-400 hover:text-slate-900 dark:text-zinc-500 dark:hover:text-white transition-colors">
                                     <X className="w-5 h-5" />
@@ -209,27 +209,27 @@ export default function ManageCourses() {
                                 <div className="space-y-4">
                                     <div className="bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                         <div>
-                                            <h4 className="text-slate-900 dark:text-white font-medium">Global Role Access</h4>
-                                            <p className="text-sm text-slate-500 dark:text-zinc-400">Instantly grant access to specific roles.</p>
+                                            <h4 className="text-slate-900 dark:text-white font-medium">{t("Global Role Access")}</h4>
+                                            <p className="text-sm text-slate-500 dark:text-zinc-400">{t("Instantly grant access to specific roles.")}</p>
                                         </div>
                                         <select className="bg-white dark:bg-black p-2.5 border border-slate-200 dark:border-white/10 rounded-lg text-sm text-slate-900 dark:text-white outline-none w-full sm:w-auto">
-                                            <option>All Consultants</option>
-                                            <option>Senior Consultants Only</option>
-                                            <option>Managers Only</option>
-                                            <option>Invite Only (Manual)</option>
+                                            <option>{t("All Consultants")}</option>
+                                            <option>{t("Senior Consultants Only")}</option>
+                                            <option>{t("Managers Only")}</option>
+                                            <option>{t("Invite Only (Manual)")}</option>
                                         </select>
                                     </div>
                                     <div className="pt-4 border-t border-slate-200 dark:border-white/10">
-                                        <h4 className="text-slate-900 dark:text-white font-medium mb-3">Enrolled Users ({enrolledUsers.length})</h4>
+                                        <h4 className="text-slate-900 dark:text-white font-medium mb-3">{t("Enrolled Users")} ({enrolledUsers.length})</h4>
                                         <div className="space-y-2 max-h-[200px] overflow-y-auto pr-2">
                                             {enrolledUsers.map((name, i) => (
                                                 <div key={i} className="flex items-center justify-between border border-slate-200 dark:border-white/5 p-3 rounded-lg bg-slate-50 dark:bg-white/[0.02]">
                                                     <span className="text-slate-700 dark:text-zinc-300 text-sm font-medium truncate">{name}</span>
-                                                    <button onClick={() => setEnrolledUsers(enrolledUsers.filter(u => u !== name))} className="text-xs text-rose-500 hover:text-rose-600 font-medium px-2 py-1 bg-rose-50 dark:bg-rose-500/10 rounded-md transition-colors shrink-0">Revoke</button>
+                                                    <button onClick={() => setEnrolledUsers(enrolledUsers.filter(u => u !== name))} className="text-xs text-rose-500 hover:text-rose-600 font-medium px-2 py-1 bg-rose-50 dark:bg-rose-500/10 rounded-md transition-colors shrink-0">{t("Revoke")}</button>
                                                 </div>
                                             ))}
                                             {enrolledUsers.length === 0 && (
-                                                <div className="text-slate-500 text-sm py-4 text-center">No users enrolled manually.</div>
+                                                <div className="text-slate-500 text-sm py-4 text-center">{t("No users enrolled manually.")}</div>
                                             )}
                                         </div>
                                     </div>
@@ -243,10 +243,10 @@ export default function ManageCourses() {
                                                 value={enrollEmail}
                                                 onChange={(e) => setEnrollEmail(e.target.value)}
                                                 onKeyDown={(e) => { if (e.key === 'Enter') handleEnroll(); }}
-                                                placeholder="Enter email or name to add user..."
+                                                placeholder={t("Enter email or name to add user...")}
                                                 className="flex-1 bg-transparent outline-none text-sm text-slate-900 dark:text-white"
                                             />
-                                            <button onClick={handleEnroll} disabled={!enrollEmail} className="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg text-xs font-medium transition-colors">Add</button>
+                                            <button onClick={handleEnroll} disabled={!enrollEmail} className="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg text-xs font-medium transition-colors">{t("Add")}</button>
                                             <button onClick={() => setShowEnrollInput(false)} className="px-2 py-1.5 text-slate-500 hover:text-slate-700 transition-colors"><X className="w-4 h-4" /></button>
                                         </div>
                                     ) : (
@@ -254,13 +254,13 @@ export default function ManageCourses() {
                                             onClick={() => setShowEnrollInput(true)}
                                             className="w-full py-2.5 mt-2 border border-dashed border-slate-300 dark:border-white/30 text-slate-600 dark:text-zinc-400 rounded-xl hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-500/50 hover:bg-violet-50 dark:hover:bg-violet-500/5 transition-colors text-sm font-medium"
                                         >
-                                            + Enroll Custom User Directly
+                                            + {t("Enroll Custom User Directly")}
                                         </button>
                                     )}
                                 </div>
                             </div>
                             <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end">
-                                <button onClick={() => setAccessCourse(null)} className="px-5 py-2 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-medium transition-colors hover:bg-slate-800 dark:hover:bg-zinc-200">Done</button>
+                                <button onClick={() => setAccessCourse(null)} className="px-5 py-2 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-medium transition-colors hover:bg-slate-800 dark:hover:bg-zinc-200">{t("Done")}</button>
                             </div>
                         </motion.div>
                     </div>

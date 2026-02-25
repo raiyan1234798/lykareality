@@ -3,8 +3,10 @@
 import { Search, UserPlus, Filter, MoreHorizontal, UserCircle, X, Mail, Edit, Trash2, Shield } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 
 export default function ManageUsers() {
+    const { t } = useLanguage();
     const [inviteModal, setInviteModal] = useState(false);
     const [email, setEmail] = useState("");
     const [role, setRole] = useState("Property Consultant");
@@ -43,15 +45,15 @@ export default function ManageUsers() {
         <div className="space-y-6">
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Manage Users</h1>
-                    <p className="text-slate-500 dark:text-zinc-400">View and manage all active Lykaa Academy members.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Manage Users")}</h1>
+                    <p className="text-slate-500 dark:text-zinc-400">{t("View and manage all active Lykaa Academy members.")}</p>
                 </div>
                 <button
                     onClick={() => setInviteModal(true)}
                     className="bg-violet-600 hover:bg-violet-700 text-white px-5 py-2.5 rounded-xl font-medium flex items-center gap-2 transition-all justify-center whitespace-nowrap"
                 >
                     <UserPlus className="w-4 h-4" />
-                    Direct Add / Invite
+                    {t("Direct Add / Invite")}
                 </button>
             </header>
 
@@ -61,7 +63,7 @@ export default function ManageUsers() {
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-zinc-500" />
                         <input
                             type="text"
-                            placeholder="Search consultants by name or email..."
+                            placeholder={t("Search consultants by name or email...")}
                             className="w-full bg-slate-100 dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-violet-500"
                         />
                     </div>
@@ -71,11 +73,11 @@ export default function ManageUsers() {
                     <table className="w-full text-left text-sm text-slate-500 dark:text-zinc-400">
                         <thead className="bg-slate-100 dark:bg-black/40 text-xs uppercase font-medium text-slate-600 dark:text-zinc-500">
                             <tr>
-                                <th className="px-6 py-4 rounded-tl-lg">Consultant</th>
-                                <th className="px-6 py-4">Role</th>
-                                <th className="px-6 py-4">Status</th>
-                                <th className="px-6 py-4">Last Active</th>
-                                <th className="px-6 py-4 text-right">Actions</th>
+                                <th className="px-6 py-4 rounded-tl-lg">{t("Consultant")}</th>
+                                <th className="px-6 py-4">{t("Role")}</th>
+                                <th className="px-6 py-4">{t("Status")}</th>
+                                <th className="px-6 py-4">{t("Last Active")}</th>
+                                <th className="px-6 py-4 text-right">{t("Actions")}</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 dark:divide-white/5">
@@ -92,21 +94,21 @@ export default function ManageUsers() {
                                     </td>
                                     <td className="px-6 py-4 text-slate-700 dark:text-zinc-300">
                                         <span className="flex items-center gap-2">
-                                            <Shield className="w-3 h-3 text-violet-500 opacity-70" /> {user.role}
+                                            <Shield className="w-3 h-3 text-violet-500 opacity-70" /> {t(user.role)}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
                                         {user.status === 'Active' ? (
                                             <span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-md text-xs font-medium bg-emerald-100 text-emerald-700 border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 border dark:border-emerald-500/20">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Active
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> {t("Active")}
                                             </span>
                                         ) : user.status === 'Pending' ? (
                                             <span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-md text-xs font-medium bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 border dark:border-amber-500/20">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Pending Invite
+                                                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> {t("Pending")}
                                             </span>
                                         ) : (
                                             <span className="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-md text-xs font-medium bg-slate-200 text-slate-700 border-slate-300 dark:bg-slate-500/10 dark:text-slate-400 border dark:border-slate-500/20">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" /> Inactive
+                                                <span className="w-1.5 h-1.5 rounded-full bg-slate-500" /> {t("Inactive")}
                                             </span>
                                         )}
                                     </td>
@@ -132,14 +134,14 @@ export default function ManageUsers() {
                                                         onClick={() => { setEditingUser(user); setMenuOpen(null); }}
                                                         className="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-zinc-300 hover:bg-slate-100 dark:hover:bg-white/5 flex items-center gap-2"
                                                     >
-                                                        <Edit className="w-4 h-4" /> Edit User
+                                                        <Edit className="w-4 h-4" /> {t("Edit User")}
                                                     </button>
                                                     <div className="h-px bg-slate-200 dark:bg-white/10 w-full" />
                                                     <button
                                                         onClick={() => handleDelete(user.id)}
                                                         className="w-full text-left px-4 py-2 text-sm text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 flex items-center gap-2"
                                                     >
-                                                        <Trash2 className="w-4 h-4" /> Delete Access
+                                                        <Trash2 className="w-4 h-4" /> {t("Delete Access")}
                                                     </button>
                                                 </motion.div>
                                             )}
@@ -205,8 +207,8 @@ export default function ManageUsers() {
                                     </div>
                                 </div>
                                 <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3">
-                                    <button type="button" onClick={() => setInviteModal(false)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">Cancel</button>
-                                    <button type="submit" disabled={!email} className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50">Add & Invite</button>
+                                    <button type="button" onClick={() => setInviteModal(false)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">{t("Cancel")}</button>
+                                    <button type="submit" disabled={!email} className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors disabled:opacity-50">{t("Add & Invite")}</button>
                                 </div>
                             </form>
                         </motion.div>
@@ -272,8 +274,8 @@ export default function ManageUsers() {
                                     </div>
                                 </div>
                                 <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3">
-                                    <button type="button" onClick={() => setEditingUser(null)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">Cancel</button>
-                                    <button type="submit" className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors">Save Changes</button>
+                                    <button type="button" onClick={() => setEditingUser(null)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">{t("Cancel")}</button>
+                                    <button type="submit" className="px-5 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-xl font-medium transition-colors">{t("Save Changes")}</button>
                                 </div>
                             </form>
                         </motion.div>

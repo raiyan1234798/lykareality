@@ -3,6 +3,7 @@
 import { Video, Mic, LayoutGrid, MonitorPlay, Save, Plus, FileQuestion, Type, List, Link as LinkIcon, UploadCloud, PlayCircle, MoreVertical, X, Check, FileCheck } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/lib/i18n";
 
 type Question = {
     id: number;
@@ -22,6 +23,7 @@ type Lesson = {
 };
 
 export default function CourseStudio() {
+    const { t } = useLanguage();
     const [lessons, setLessons] = useState<Lesson[]>([
         { id: 1, title: "Introduction to Closing", type: "video", videoSource: "local", videoUrl: "" },
         { id: 2, title: "Handling Objections Assessment", type: "quiz", questions: [] }
@@ -73,8 +75,8 @@ export default function CourseStudio() {
         <div className="space-y-6">
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">Course Studio</h1>
-                    <p className="text-slate-500 dark:text-zinc-400">Record, edit, assemble training materials, and build quizzes.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Course Studio")}</h1>
+                    <p className="text-slate-500 dark:text-zinc-400">{t("Record, edit, assemble training materials, and build quizzes.")}</p>
                 </div>
                 <button
                     onClick={handleSave}
@@ -83,11 +85,11 @@ export default function CourseStudio() {
                     <AnimatePresence mode="wait">
                         {saved ? (
                             <motion.div key="saved" initial={{ y: 20 }} animate={{ y: 0 }} exit={{ y: -20 }} className="flex items-center gap-2">
-                                <FileCheck className="w-4 h-4" /> Saved!
+                                <FileCheck className="w-4 h-4" /> {t("Saved!")}
                             </motion.div>
                         ) : (
                             <motion.div key="save" initial={{ y: 20 }} animate={{ y: 0 }} exit={{ y: -20 }} className="flex items-center gap-2">
-                                <Save className="w-4 h-4" /> Save Draft
+                                <Save className="w-4 h-4" /> {t("Save Draft")}
                             </motion.div>
                         )}
                     </AnimatePresence>
@@ -109,7 +111,7 @@ export default function CourseStudio() {
                                         value={activeLesson.title}
                                         onChange={(e) => updateActiveLesson({ title: e.target.value })}
                                         className="text-xl font-bold bg-transparent border-none outline-none text-slate-900 dark:text-white w-full focus:ring-0 p-0"
-                                        placeholder="Enter lesson title..."
+                                        placeholder={t("Enter lesson title...")}
                                     />
                                 </div>
                             </div>
@@ -121,7 +123,7 @@ export default function CourseStudio() {
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="flex items-center gap-3">
                                                 <MonitorPlay className="w-5 h-5 text-violet-500" />
-                                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Video Source</h2>
+                                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t("Video Source")}</h2>
                                             </div>
                                             <div className="flex gap-2">
                                                 {["local", "youtube", "drive", "github"].map(src => (
@@ -142,8 +144,8 @@ export default function CourseStudio() {
                                                     <UploadCloud className="w-8 h-8 text-slate-400 dark:text-zinc-500 group-hover:text-violet-500" />
                                                 </div>
                                                 <div className="text-center">
-                                                    <p className="text-slate-700 dark:text-zinc-300 font-medium">Click to upload or drag files</p>
-                                                    <p className="text-sm text-slate-500 dark:text-zinc-500">MP4, WebM up to 2GB</p>
+                                                    <p className="text-slate-700 dark:text-zinc-300 font-medium">{t("Click to upload or drag files")}</p>
+                                                    <p className="text-sm text-slate-500 dark:text-zinc-500">{t("MP4, WebM up to 2GB")}</p>
                                                 </div>
                                             </div>
                                         ) : (
@@ -158,7 +160,7 @@ export default function CourseStudio() {
                                                 />
                                                 {activeLesson.videoUrl && (
                                                     <div className="px-4 py-2 bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-sm font-medium rounded-lg flex items-center gap-2 mt-4 transition-all">
-                                                        <Check className="w-4 h-4" /> Link attached securely
+                                                        <Check className="w-4 h-4" /> {t("Link attached securely")}
                                                     </div>
                                                 )}
                                             </div>
@@ -170,14 +172,14 @@ export default function CourseStudio() {
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="flex items-center gap-3">
                                                 <Mic className="w-5 h-5 text-violet-500" />
-                                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">Voiceover & Audio Option</h2>
+                                                <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t("Voiceover & Audio Option")}</h2>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <button className="px-4 py-1.5 bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-zinc-400 hover:bg-slate-200 dark:hover:bg-white/10 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                                                    <UploadCloud className="w-4 h-4" /> Upload Audio
+                                                    <UploadCloud className="w-4 h-4" /> {t("Upload Audio")}
                                                 </button>
                                                 <button className="px-4 py-1.5 bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-500/20 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                                                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" /> Record
+                                                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" /> {t("Record")}
                                                 </button>
                                             </div>
                                         </div>
@@ -188,7 +190,7 @@ export default function CourseStudio() {
                                                     <div key={i} className="flex-1 bg-violet-500 rounded-full" style={{ height: `${Math.random() * 60 + 10}%` }} />
                                                 ))}
                                             </div>
-                                            <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium z-10 bg-white/50 dark:bg-black/50 px-3 py-1 rounded backdrop-blur-sm">Audio timeline (Optional)</p>
+                                            <p className="text-slate-500 dark:text-zinc-500 text-sm font-medium z-10 bg-white/50 dark:bg-black/50 px-3 py-1 rounded backdrop-blur-sm">{t("Audio timeline (Optional)")}</p>
                                         </div>
                                     </div>
                                 </>
@@ -198,14 +200,14 @@ export default function CourseStudio() {
                                     <div className="flex items-center justify-between mb-6">
                                         <div className="flex items-center gap-3">
                                             <FileQuestion className="w-5 h-5 text-emerald-500" />
-                                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Questions Manager</h2>
+                                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t("Questions Manager")}</h2>
                                         </div>
                                         <div className="flex gap-2">
                                             <button onClick={() => addQuestion("multichoice")} className="px-3 py-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                                                <List className="w-4 h-4" /> Multi-Choice
+                                                <List className="w-4 h-4" /> {t("Multi-Choice")}
                                             </button>
                                             <button onClick={() => addQuestion("typable")} className="px-3 py-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-zinc-300 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                                                <Type className="w-4 h-4" /> Typable
+                                                <Type className="w-4 h-4" /> {t("Typable")}
                                             </button>
                                         </div>
                                     </div>
@@ -213,7 +215,7 @@ export default function CourseStudio() {
                                     <div className="space-y-6">
                                         {!activeLesson.questions?.length && (
                                             <div className="text-center py-10 bg-slate-50 dark:bg-black/30 rounded-xl border border-dashed border-slate-300 dark:border-white/10 text-slate-500 dark:text-zinc-500 font-medium">
-                                                No questions added yet.
+                                                {t("No questions added yet.")}
                                             </div>
                                         )}
                                         {activeLesson.questions?.map((q, idx) => (
@@ -222,7 +224,7 @@ export default function CourseStudio() {
                                                     <span className="bg-violet-100 dark:bg-violet-500/20 text-violet-700 dark:text-violet-400 font-bold w-6 h-6 flex items-center justify-center rounded shrink-0">{idx + 1}</span>
                                                     <input
                                                         type="text"
-                                                        placeholder="Enter question text..."
+                                                        placeholder={t("Enter question text...")}
                                                         value={q.text}
                                                         onChange={(e) => updateQuestion(q.id, { text: e.target.value })}
                                                         className="w-full bg-transparent text-slate-900 dark:text-white border-b border-slate-300 dark:border-white/20 focus:border-violet-500 outline-none pb-1 font-medium"
@@ -250,7 +252,7 @@ export default function CourseStudio() {
                                                                         onClick={() => updateQuestion(q.id, { correctAnswer: opt })}
                                                                         className="text-xs font-medium text-slate-500 hover:text-emerald-500 transition-colors"
                                                                     >
-                                                                        Mark Correct
+                                                                        {t("Mark Correct")}
                                                                     </button>
                                                                 </div>
                                                             ))}
@@ -258,7 +260,7 @@ export default function CourseStudio() {
                                                                 onClick={() => updateQuestion(q.id, { options: [...(q.options || []), `Option ${(q.options?.length || 0) + 1}`] })}
                                                                 className="text-xs text-violet-600 dark:text-violet-400 font-medium hover:underline flex items-center gap-1 mt-2"
                                                             >
-                                                                <Plus className="w-3 h-3" /> Add Option
+                                                                <Plus className="w-3 h-3" /> {t("Add Option")}
                                                             </button>
                                                         </>
                                                     ) : (
@@ -269,7 +271,7 @@ export default function CourseStudio() {
                                                                 onChange={(e) => updateQuestion(q.id, { correctAnswer: e.target.value })}
                                                                 className="w-full bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 px-3 py-2 rounded-md text-sm text-slate-700 dark:text-zinc-300 outline-none focus:border-violet-500 min-h-[60px]"
                                                             />
-                                                            <p className="text-xs text-slate-500 dark:text-zinc-500 mt-1">Users will type their answer. It will be verified against what you enter above.</p>
+                                                            <p className="text-xs text-slate-500 dark:text-zinc-500 mt-1">{t("Users will type their answer. It will be verified against what you enter above.")}</p>
                                                         </div>
                                                     )}
                                                 </div>
@@ -281,7 +283,7 @@ export default function CourseStudio() {
                         </>
                     ) : (
                         <div className="h-[400px] flex items-center justify-center border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl bg-white dark:bg-slate-900/50">
-                            <p className="text-slate-500 dark:text-zinc-500 font-medium">Select a lesson or quiz from the structure panel to edit.</p>
+                            <p className="text-slate-500 dark:text-zinc-500 font-medium">{t("Select a lesson or quiz from the structure panel to edit.")}</p>
                         </div>
                     )}
                 </div>
@@ -291,7 +293,7 @@ export default function CourseStudio() {
                     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-2xl p-6 shadow-sm">
                         <div className="flex items-center gap-3 mb-6">
                             <LayoutGrid className="w-5 h-5 text-violet-500" />
-                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">Module Structure</h2>
+                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t("Module Structure")}</h2>
                         </div>
                         <div className="space-y-3">
                             {lessons.map((item, idx) => (
@@ -310,7 +312,7 @@ export default function CourseStudio() {
                                                 {item.title}
                                             </div>
                                             <div className={`text-xs ${selectedLessonId === item.id ? 'text-violet-600 dark:text-violet-400' : 'text-slate-500 dark:text-zinc-500'}`}>
-                                                {item.type === 'video' ? 'Video Lesson' : 'Interactive Quiz'}
+                                                {item.type === 'video' ? t('Video Lesson') : t('Interactive Quiz')}
                                             </div>
                                         </div>
                                     </div>
@@ -320,10 +322,10 @@ export default function CourseStudio() {
 
                             <div className="pt-4 flex gap-2">
                                 <button onClick={() => addLesson("video")} className="flex-1 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
-                                    <Video className="w-4 h-4" /> Add Video
+                                    <Video className="w-4 h-4" /> {t("Add Video")}
                                 </button>
                                 <button onClick={() => addLesson("quiz")} className="flex-1 py-2.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium text-slate-700 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
-                                    <FileQuestion className="w-4 h-4" /> Add Quiz
+                                    <FileQuestion className="w-4 h-4" /> {t("Add Quiz")}
                                 </button>
                             </div>
                         </div>
