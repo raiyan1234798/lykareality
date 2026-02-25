@@ -39,7 +39,7 @@ export default function WhyTrain() {
                         viewport={{ once: true }}
                         className="text-violet-500 font-medium tracking-widest uppercase text-sm mb-4"
                     >
-                        The Lykaa Advantage
+                        The Lyka Advantage
                     </motion.h2>
                     <motion.h3
                         initial={{ opacity: 0, y: 20 }}

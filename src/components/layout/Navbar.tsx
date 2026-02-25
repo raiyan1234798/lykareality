@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -20,11 +21,8 @@ export default function Navbar() {
     return (
         <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-background/80 backdrop-blur-xl border-b border-white/5 py-4 shadow-lg shadow-black/5" : "bg-transparent py-6"}`}>
             <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="w-10 h-10 bg-violet-500 rounded-sm flex items-center justify-center transform group-hover:rotate-45 transition-transform duration-500 shadow-[0_0_15px_rgba(212,175,55,0.3)]">
-                        <span className="text-slate-950 font-bold font-serif text-xl -rotate-45 group-hover:rotate-0 transition-transform duration-500">L</span>
-                    </div>
-                    <span className="text-xl font-semibold tracking-wide text-white">LYKAA <span className="text-violet-500 font-light">ACADEMY</span></span>
+                <Link href="/">
+                    <Logo />
                 </Link>
                 <div className="hidden md:flex items-center gap-8">
                     {["Programs", "Developers", "Insights", "Enterprise"].map((item) => (

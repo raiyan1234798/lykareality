@@ -48,7 +48,7 @@ export default function AllCourses() {
                         {t("All Courses")}
                     </h1>
                     <p className="text-slate-500 dark:text-zinc-400 transition-colors">
-                        {t("Browse the Lykaa Academy library and request enrollment.")}
+                        {t("Browse the Lyka Academy library and request enrollment.")}
                     </p>
                 </div>
             </header>

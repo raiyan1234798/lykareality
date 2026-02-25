@@ -12,6 +12,7 @@ import Chatbot from "@/components/ui/Chatbot";
 import { useTheme } from "next-themes";
 import { LanguageProvider, useLanguage, Language } from "@/lib/i18n";
 import { useUserRole } from "@/hooks/useUserRole";
+import { Logo } from "@/components/ui/Logo";
 
 const ADMIN_NAV_ITEMS = [
     { href: "/dashboard", label: "Analytics Dashboard", icon: BarChart3 },
@@ -114,14 +115,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                 {/* Logo Area */}
                 <div className="h-20 flex flex-col items-center justify-center border-b border-slate-200 dark:border-white/5 relative shrink-0">
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-violet-400 to-violet-600 rounded flex items-center justify-center shadow-[0_0_15px_rgba(212,175,55,0.4)]">
-                            <span className="text-white dark:text-slate-950 font-serif font-bold text-xl">L</span>
-                        </div>
-                        {!collapsed && (
-                            <span className="text-lg font-semibold tracking-wide text-slate-900 dark:text-white whitespace-nowrap overflow-hidden">
-                                LYKAA <span className="text-violet-600 dark:text-violet-500 font-light hidden xl:inline">ACADEMY</span>
-                            </span>
-                        )}
+                        <Logo collapsed={collapsed} />
                     </Link>
                     <button
                         onClick={() => setCollapsed(!collapsed)}
@@ -199,9 +193,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <header className="h-16 flex items-center justify-between px-4 border-b border-slate-200 dark:border-white/5 relative z-40 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md">
                     <div className="flex items-center gap-2 md:hidden">
                         <Link href="/" className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded bg-violet-600 dark:bg-violet-500 flex items-center justify-center">
-                                <span className="text-white dark:text-slate-950 font-bold font-serif text-sm">L</span>
-                            </div>
+                            <Logo collapsed={true} />
                         </Link>
                         <button onClick={() => setMobileOpen(true)} className="text-slate-900 dark:text-white" title="Menu">
                             <Menu className="w-6 h-6" />

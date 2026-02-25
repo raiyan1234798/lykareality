@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Lykaa Realty Academy | Premium Real Estate Training",
-  description: "Enterprise-grade real estate learning platform for Lykaa Realty.",
+  title: "Lyka Realty Academy | Premium Real Estate Training",
+  description: "Enterprise-grade real estate learning platform for Lyka Realty.",
 };
 
 export default function RootLayout({

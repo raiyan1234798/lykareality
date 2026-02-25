@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 import { useUserRole } from "@/hooks/useUserRole";
+import { LogoSVG } from "@/components/ui/Logo";
 
 export default function Settings() {
     const { t } = useLanguage();
@@ -55,7 +56,7 @@ export default function Settings() {
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Platform Settings")}</h1>
-                    <p className="text-slate-500 dark:text-zinc-400">{t("Configure your Lykaa Academy enterprise workspace.")}</p>
+                    <p className="text-slate-500 dark:text-zinc-400">{t("Configure your Lyka Academy enterprise workspace.")}</p>
                 </div>
                 <button
                     onClick={handleSave}
@@ -97,7 +98,7 @@ export default function Settings() {
                                     <div className="space-y-5 flex flex-col max-w-xl">
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Workspace Name")}</label>
-                                            <input type="text" defaultValue="Lykaa Realty Academy" className="w-full bg-slate-50 dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500/50" />
+                                            <input type="text" defaultValue="Lyka Realty Academy" className="w-full bg-slate-50 dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500/50" />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Contact Email")}</label>
@@ -106,8 +107,8 @@ export default function Settings() {
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Company Logo")}</label>
                                             <div className="flex items-center gap-4 mt-2">
-                                                <div className="w-16 h-16 bg-gradient-to-br from-violet-400 to-violet-600 rounded-xl flex items-center justify-center shadow-lg">
-                                                    <span className="text-slate-50 font-serif font-bold text-2xl">L</span>
+                                                <div className="w-16 h-16 flex items-center justify-center -ml-2">
+                                                    <LogoSVG className="w-16 h-16 origin-center scale-150" />
                                                 </div>
                                                 <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={() => handleSave()} />
                                                 <button onClick={() => fileInputRef.current?.click()} className="px-4 py-2 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
@@ -222,7 +223,7 @@ export default function Settings() {
                                 </div>
                                 <h3 className="text-xl font-bold text-slate-900 dark:text-white">{t("Are you sure?")}</h3>
                                 <p className="text-slate-500 dark:text-zinc-400 text-sm">
-                                    {t("This action cannot be undone. All courses, users, analytics, and data will be permanently deleted across Lykaa Academy.")}
+                                    {t("This action cannot be undone. All courses, users, analytics, and data will be permanently deleted across Lyka Academy.")}
                                 </p>
                             </div>
                             <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3">

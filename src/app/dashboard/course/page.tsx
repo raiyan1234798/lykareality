@@ -10,7 +10,7 @@ type Module = { id: number, title: string, duration: string, lessons: Lesson[] }
 const MODULES: Module[] = [
     {
         id: 1,
-        title: "The Lykaa Foundation",
+        title: "The Lyka Foundation",
         duration: "45m",
         lessons: [
             { id: 101, title: "Welcome to Elite Real Estate", duration: "12:30", completed: true },

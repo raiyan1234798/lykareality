@@ -42,7 +42,7 @@ export default function Hero() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
                         <span className="inline-block py-1 px-3 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-500 text-sm font-medium tracking-wider mb-6">
-                            LYKAA REALTY ACADEMY
+                            LYKA REALTY ACADEMY
                         </span>
                     </motion.div>
 

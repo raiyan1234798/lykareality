@@ -22,7 +22,7 @@ export default function Home() {
       {/* Footer minimal */}
       <footer className="bg-slate-950 py-12 border-t border-white/10 text-center text-zinc-500 text-sm">
         <div className="container mx-auto px-6">
-          <p>© {new Date().getFullYear()} Lykaa Realty Academy. Enterprise Training Edition.</p>
+          <p>© {new Date().getFullYear()} Lyka Realty Academy. Enterprise Training Edition.</p>
         </div>
       </footer>
     </main>

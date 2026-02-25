@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Logo } from "@/components/ui/Logo";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { auth, googleProvider, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
@@ -95,11 +96,13 @@ export default function Login() {
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-violet-500 to-transparent opacity-50" />
 
                 <div className="text-center mb-10">
-                    <Link href="/" className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-400 to-violet-600 rounded-xl shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:scale-105 transition-transform mb-6">
-                        <span className="text-slate-950 font-serif font-bold text-3xl">L</span>
-                    </Link>
+                    <div className="flex justify-center mb-10">
+                        <Link href="/" className="hover:scale-105 transition-transform">
+                            <Logo className="scale-125 origin-center" />
+                        </Link>
+                    </div>
                     <h1 className="text-3xl font-bold text-white tracking-tight mb-2">Secure Gateway</h1>
-                    <p className="text-zinc-400 text-sm">Enterprise portal for Lykaa consultants.</p>
+                    <p className="text-zinc-400 text-sm">Enterprise portal for Lyka consultants.</p>
                 </div>
 
                 <form onSubmit={handleLogin} className="space-y-6">
@@ -195,10 +198,10 @@ export default function Login() {
 
                 <div className="mt-8 pt-6 border-t border-white/5 text-center px-4">
                     <p className="text-zinc-500 text-xs leading-relaxed">
-                        By logging in, you agree to the Lykaa Realty Enterprise terms of service. Unauthorized access is strictly prohibited.
+                        By logging in, you agree to the Lyka Realty Enterprise terms of service. Unauthorized access is strictly prohibited.
                     </p>
                 </div>
-            </motion.div>
-        </div>
+            </motion.div >
+        </div >
     );
 }

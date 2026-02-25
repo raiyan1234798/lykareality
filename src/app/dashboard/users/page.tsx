@@ -142,7 +142,7 @@ export default function ManageUsers() {
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Manage Users")}</h1>
-                    <p className="text-slate-500 dark:text-zinc-400">{t("View and manage all active Lykaa Academy members.")}</p>
+                    <p className="text-slate-500 dark:text-zinc-400">{t("View and manage all active Lyka Academy members.")}</p>
                 </div>
                 <button
                     onClick={() => setInviteModal(true)}

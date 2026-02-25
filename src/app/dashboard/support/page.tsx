@@ -92,7 +92,7 @@ export default function SupportCenter() {
                 <div>
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 transition-colors">{t("Support Center")}</h1>
                     <p className="text-slate-500 dark:text-zinc-400">
-                        {viewMode === "admin" ? t("Respond to trainee and consultant support requests.") : t("Get help with your Lykaa Academy account.")}
+                        {viewMode === "admin" ? t("Respond to trainee and consultant support requests.") : t("Get help with your Lyka Academy account.")}
                     </p>
                 </div>
                 <div className="flex gap-3">

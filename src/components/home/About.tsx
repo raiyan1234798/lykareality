@@ -68,7 +68,7 @@ export default function About() {
                                 <p className="text-white font-serif italic text-xl mb-4 text-center">
                                     "Only those who master the market can sell the skyline."
                                 </p>
-                                <p className="text-violet-400 text-sm text-center font-bold tracking-widest uppercase">The Lykaa Standard</p>
+                                <p className="text-violet-400 text-sm text-center font-bold tracking-widest uppercase">The Lyka Standard</p>
                             </div>
                         </div>
                     </motion.div>

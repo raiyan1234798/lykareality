@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
+import { LogoSVG } from "@/components/ui/Logo";
 
 const InputField = ({ label, type = "text", value, onChange, required = true }: any) => {
     const [focused, setFocused] = useState(false);
@@ -186,7 +187,7 @@ export default function RequestAccess() {
                                 </div>
                                 <h3 className="text-2xl font-bold text-white mb-4">Application Received</h3>
                                 <p className="text-zinc-400 mb-8 max-w-sm mx-auto font-light leading-relaxed">
-                                    Your request for access has been submitted successfully to the Lykaa Academy administration. You will receive an email shortly regarding your approval status.
+                                    Your request for access has been submitted successfully to the Lyka Academy administration. You will receive an email shortly regarding your approval status.
                                 </p>
                                 <Link href="/" className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-medium rounded border border-white/10 transition-colors inline-block">
                                     Return to Homepage
@@ -210,9 +211,11 @@ export default function RequestAccess() {
                         The difference between a good agent and a top producer is the knowledge they command and the network they leverage.
                     </p>
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-violet-500 font-bold text-sm">LR</div>
+                        <div className="w-10 h-10 flex items-center justify-center">
+                            <LogoSVG className="w-10 h-10" />
+                        </div>
                         <div>
-                            <div className="text-white text-sm font-semibold">Lykaa Realty Group</div>
+                            <div className="text-white text-sm font-semibold">Lyka Realty Group</div>
                             <div className="text-zinc-500 text-xs">Director of Sales</div>
                         </div>
                     </div>

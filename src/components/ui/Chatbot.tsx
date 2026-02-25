@@ -16,7 +16,7 @@ type Message = {
 export default function Chatbot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { role: "model", text: "Hello! I am your Lykaa AI Executive Assistant. How can I help you dominate the luxury real estate market today?" }
+        { role: "model", text: "Hello! I am your Lyka AI Executive Assistant. How can I help you dominate the luxury real estate market today?" }
     ]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -92,7 +92,7 @@ export default function Chatbot() {
                                     <Bot className="w-5 h-5 text-violet-500" />
                                 </div>
                                 <div>
-                                    <h3 className="text-white font-medium text-sm">Lykaa AI Assistant</h3>
+                                    <h3 className="text-white font-medium text-sm">Lyka AI Assistant</h3>
                                     <p className="text-zinc-400 text-xs">Powered by Gemini</p>
                                 </div>
                             </div>
