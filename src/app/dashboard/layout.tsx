@@ -23,6 +23,45 @@ const NAV_ITEMS = [
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
+const TRANSLATIONS: Record<string, Record<string, string>> = {
+    EN: {
+        "Analytics Dashboard": "Analytics Dashboard",
+        "Access Requests": "Access Requests",
+        "Manage Users": "Manage Users",
+        "Manage Courses": "Manage Courses",
+        "Course Studio": "Course Studio",
+        "Quiz Builder": "Quiz Builder",
+        "Evaluations": "Evaluations",
+        "Support Center": "Support Center",
+        "Settings": "Settings",
+        "Toggle Theme": "Toggle Theme"
+    },
+    AR: {
+        "Analytics Dashboard": "لوحة التحليلات",
+        "Access Requests": "طلبات الوصول",
+        "Manage Users": "إدارة المستخدمين",
+        "Manage Courses": "إدارة الدورات",
+        "Course Studio": "استوديو الدورة",
+        "Quiz Builder": "منشئ الاختبارات",
+        "Evaluations": "التقييمات",
+        "Support Center": "مركز الدعم",
+        "Settings": "الإعدادات",
+        "Toggle Theme": "تبديل المظهر"
+    },
+    HI: {
+        "Analytics Dashboard": "एनालिटिक्स डैशबोर्ड",
+        "Access Requests": "पहुंच अनुरोध",
+        "Manage Users": "उपयोगकर्ता प्रबंधन",
+        "Manage Courses": "पाठ्यक्रम प्रबंधित करें",
+        "Course Studio": "कोर्स स्टूडियो",
+        "Quiz Builder": "क्विज़ बिल्डर",
+        "Evaluations": "मूल्यांकन",
+        "Support Center": "सहायता केंद्र",
+        "Settings": "सेटिंग्स",
+        "Toggle Theme": "थीम बदलें"
+    }
+};
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const [collapsed, setCollapsed] = useState(false);
@@ -38,11 +77,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const unreadCount = notifications.filter(n => n.unread).length;
 
     return (
-        <div className="min-h-screen bg-slate-950 flex overflow-hidden">
+        <div className="min-h-screen bg-white dark:bg-slate-950 flex overflow-hidden">
             {/* Mobile Overlay */}
             {mobileOpen && (
                 <div
-                    className="fixed inset-0 bg-slate-950/60 z-40 md:hidden backdrop-blur-sm"
+                    className="fixed inset-0 bg-slate-900/60 dark:bg-slate-950/60 z-40 md:hidden backdrop-blur-sm"
                     onClick={() => setMobileOpen(false)}
                 />
             )}
@@ -51,18 +90,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <motion.aside
                 initial={false}
                 animate={{ width: collapsed ? 80 : 280, x: mobileOpen ? 0 : (typeof window !== 'undefined' && window.innerWidth < 768 ? -280 : 0) }}
-                className={`fixed md:relative top-0 left-0 z-50 h-screen bg-slate-950/40 backdrop-blur-2xl border-r border-white/10 flex flex-col transition-all duration-300 ease-in-out`}
+                className={`fixed md:relative top-0 left-0 z-50 h-screen bg-slate-50/80 dark:bg-slate-950/40 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 flex flex-col transition-all duration-300 ease-in-out`}
                 style={{ width: collapsed ? 80 : 280 }}
             >
                 {/* Logo Area */}
-                <div className="h-20 flex flex-col items-center justify-center border-b border-white/5 relative shrink-0">
+                <div className="h-20 flex flex-col items-center justify-center border-b border-slate-200 dark:border-white/5 relative shrink-0">
                     <Link href="/" className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-violet-400 to-violet-600 rounded flex items-center justify-center shadow-[0_0_15px_rgba(212,175,55,0.4)]">
-                            <span className="text-slate-950 font-serif font-bold text-xl">L</span>
+                            <span className="text-white dark:text-slate-950 font-serif font-bold text-xl">L</span>
                         </div>
                         {!collapsed && (
-                            <span className="text-lg font-semibold tracking-wide text-white whitespace-nowrap overflow-hidden hidden md:block">
-                                LYKAA <span className="text-violet-500 font-light hidden xl:inline">ACADEMY</span>
+                            <span className="text-lg font-semibold tracking-wide text-slate-900 dark:text-white whitespace-nowrap overflow-hidden hidden md:block">
+                                LYKAA <span className="text-violet-600 dark:text-violet-500 font-light hidden xl:inline">ACADEMY</span>
                             </span>
                         )}
                     </Link>
@@ -79,22 +118,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     {NAV_ITEMS.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
+                        const translatedLabel = TRANSLATIONS[language]?.[item.label] || item.label;
 
                         return (
                             <Link
                                 key={item.href}
                                 href={item.href}
                                 className={`flex items-center gap-3 px-3 py-3 rounded-lg transition-all duration-300 group relative ${isActive
-                                    ? "bg-violet-500/10 text-violet-500 shadow-[inset_4px_0_0_rgba(212,175,55,1)]"
-                                    : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                                    ? "bg-violet-500/10 text-violet-600 dark:text-violet-500 shadow-[inset_4px_0_0_rgba(139,92,246,1)] dark:shadow-[inset_4px_0_0_var(--tw-shadow-color)] shadow-violet-500"
+                                    : "text-slate-600 dark:text-zinc-400 hover:bg-slate-200/50 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
                                     }`}
                             >
-                                <div className={`shrink-0 ${isActive ? "text-violet-500 transition-colors" : "group-hover:text-violet-400"}`}>
-                                    <Icon className="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.8)] transition-all duration-300" />
+                                <div className={`shrink-0 ${isActive ? "text-violet-600 dark:text-violet-500 transition-colors" : "group-hover:text-violet-500 dark:group-hover:text-violet-400"}`}>
+                                    <Icon className="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.5)] transition-all duration-300" />
                                 </div>
                                 {!collapsed && (
-                                    <span className={`text-sm font-medium whitespace-nowrap hidden md:block ${isActive ? "text-white" : ""}`}>
-                                        {item.label}
+                                    <span className={`text-sm font-medium whitespace-nowrap hidden md:block ${isActive ? "text-slate-900 dark:text-white" : ""}`}>
+                                        {translatedLabel}
                                     </span>
                                 )}
                                 {isActive && (
@@ -106,14 +146,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </div>
 
                 {/* User Info / Profile & Theme Toggle */}
-                <div className="p-4 border-t border-slate-200 dark:border-white/5 shrink-0 bg-slate-50 dark:bg-slate-950/20 flex flex-col gap-3">
+                <div className="p-4 border-t border-slate-200 dark:border-white/5 shrink-0 bg-slate-100/50 dark:bg-slate-950/20 flex flex-col gap-3">
                     <button
                         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                        className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors text-slate-500 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
+                        className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white"
                         title="Toggle Light/Dark Theme"
                     >
                         {theme === "dark" ? <Sun className="w-5 h-5 shrink-0" /> : <Moon className="w-5 h-5 shrink-0" />}
-                        {!collapsed && <span className="text-sm font-medium">Toggle Theme</span>}
+                        {!collapsed && <span className="text-sm font-medium">{TRANSLATIONS[language]?.["Toggle Theme"] || "Toggle Theme"}</span>}
                     </button>
                     <div className="flex items-center gap-3 w-full rounded-lg cursor-pointer hover:bg-slate-200 dark:hover:bg-white/5 p-2 transition-colors">
                         <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-violet-500/30 flex items-center justify-center shrink-0">
