@@ -1,11 +1,13 @@
 "use client";
 
-import { Users, Clock, CheckCircle, X, Check, Search, BookOpen, ChevronRight, ArrowRightLeft } from "lucide-react";
-import { useState } from "react";
+import { Users, Clock, CheckCircle, X, Check, Search, BookOpen, ChevronRight, ArrowRightLeft, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
+import { collection, query, where, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
-type RequestType = { id: number; name: string; time: string };
+type RequestType = { id: string; name: string; time: string; originalDoc?: any };
 
 const AVAILABLE_COURSES = [
     { id: "c1", title: "Luxury Closing Techniques" },
@@ -16,16 +18,48 @@ const AVAILABLE_COURSES = [
 
 export default function AccessRequests() {
     const { t } = useLanguage();
-    const [requests, setRequests] = useState<RequestType[]>([
-        { id: 1, name: "Alexander Patel", time: "2 hours ago" },
-        { id: 2, name: "Sofia Rossi", time: "3 hours ago" },
-        { id: 3, name: "Omar Al Fayed", time: "5 hours ago" },
-    ]);
+    const [requests, setRequests] = useState<RequestType[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
     const [approvedCount, setApprovedCount] = useState(5);
 
     const [approvalModal, setApprovalModal] = useState<RequestType | null>(null);
     const [role, setRole] = useState("Property Consultant");
     const [assignedCourses, setAssignedCourses] = useState<string[]>([]);
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    useEffect(() => {
+        const fetchPendingRequests = async () => {
+            try {
+                const q = query(collection(db, "users"), where("status", "==", "pending"));
+                const querySnapshot = await getDocs(q);
+                const reqs: RequestType[] = [];
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    let formattedTime = "Recently";
+                    if (data.createdAt) {
+                        const date = data.createdAt.toDate();
+                        const diffInHours = Math.floor((new Date().getTime() - date.getTime()) / (1000 * 3600));
+                        if (diffInHours > 24) formattedTime = `${Math.floor(diffInHours / 24)} days ago`;
+                        else if (diffInHours > 0) formattedTime = `${diffInHours} hours ago`;
+                        else formattedTime = "Just now";
+                    }
+                    reqs.push({
+                        id: docSnap.id,
+                        name: data.name || data.email?.split("@")[0] || "Unknown User",
+                        time: formattedTime,
+                        originalDoc: data
+                    });
+                });
+                setRequests(reqs);
+            } catch (error) {
+                console.error("Error fetching requests:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchPendingRequests();
+    }, []);
 
     const toggleCourse = (courseId: string) => {
         if (assignedCourses.includes(courseId)) {
@@ -35,17 +69,37 @@ export default function AccessRequests() {
         }
     };
 
-    const handleApprove = () => {
+    const handleApprove = async () => {
         if (!approvalModal) return;
-        setRequests(requests.filter(r => r.id !== approvalModal.id));
-        setApprovedCount(prev => prev + 1);
-        setApprovalModal(null);
-        setAssignedCourses([]);
-        setRole("Property Consultant");
+        setIsProcessing(true);
+        try {
+            const userRef = doc(db, "users", approvalModal.id);
+            await updateDoc(userRef, {
+                status: "approved",
+                role: role,
+                enrolledCourses: assignedCourses,
+                approvedAt: new Date()
+            });
+
+            setRequests(requests.filter(r => r.id !== approvalModal.id));
+            setApprovedCount(prev => prev + 1);
+            setApprovalModal(null);
+            setAssignedCourses([]);
+            setRole("Property Consultant");
+        } catch (error) {
+            console.error("Error approving request:", error);
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
-    const handleDecline = (id: number) => {
-        setRequests(requests.filter(r => r.id !== id));
+    const handleDecline = async (id: string) => {
+        try {
+            await deleteDoc(doc(db, "users", id));
+            setRequests(requests.filter(r => r.id !== id));
+        } catch (error) {
+            console.error("Error declining request:", error);
+        }
     };
 
     return (
@@ -86,12 +140,21 @@ export default function AccessRequests() {
             </div>
 
             <div className="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl overflow-hidden backdrop-blur-sm shadow-sm">
-                <div className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-transparent">
-                    <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t("Recent Requests")} ({requests.length})</h2>
+                <div className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-transparent flex items-center justify-between flex-wrap gap-4">
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                        {t("Recent Requests")}
+                        <span className="bg-violet-100 dark:bg-violet-500/20 text-violet-700 dark:text-violet-400 px-2.5 py-0.5 rounded-full text-sm font-medium">
+                            {requests.length}
+                        </span>
+                    </h2>
                 </div>
                 <div className="p-6">
                     <AnimatePresence>
-                        {requests.length === 0 ? (
+                        {isLoading ? (
+                            <div className="flex justify-center items-center py-12">
+                                <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
+                            </div>
+                        ) : requests.length === 0 ? (
                             <div className="text-center py-10 text-slate-500 dark:text-zinc-500 font-medium">{t("No pending requests at this time.")}</div>
                         ) : (
                             <div className="space-y-4">
@@ -232,8 +295,11 @@ export default function AccessRequests() {
                                 </div>
                             </div>
                             <div className="p-6 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-950/50 flex justify-end gap-3 shrink-0">
-                                <button onClick={() => setApprovalModal(null)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">{t("Cancel")}</button>
-                                <button onClick={handleApprove} className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)]">{t("Complete Approval Pipeline")}</button>
+                                <button disabled={isProcessing} onClick={() => setApprovalModal(null)} className="px-5 py-2 text-slate-600 dark:text-zinc-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium">{t("Cancel")}</button>
+                                <button disabled={isProcessing} onClick={handleApprove} className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-medium transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)] flex items-center gap-2 disabled:opacity-50">
+                                    {isProcessing && <Loader2 className="w-4 h-4 animate-spin" />}
+                                    {t("Complete Approval Pipeline")}
+                                </button>
                             </div>
                         </motion.div>
                     </div>

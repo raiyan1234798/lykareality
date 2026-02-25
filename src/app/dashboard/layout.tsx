@@ -87,7 +87,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
             {/* Mobile Overlay */}
             {mobileOpen && (
                 <div
-                    className="fixed inset-0 bg-slate-900/60 dark:bg-slate-950/60 z-40 md:hidden backdrop-blur-sm"
+                    className="fixed inset-0 bg-slate-900/60 dark:bg-slate-950/60 z-50 md:hidden backdrop-blur-sm"
                     onClick={() => setMobileOpen(false)}
                 />
             )}
@@ -95,8 +95,8 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
             {/* Sidebar */}
             <motion.aside
                 initial={false}
-                animate={{ width: collapsed ? 80 : 280, x: mobileOpen ? 0 : (typeof window !== 'undefined' && window.innerWidth < 768 ? -280 : 0) }}
-                className={`fixed md:relative top-0 left-0 z-50 h-screen bg-slate-50/80 dark:bg-slate-950/40 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 flex flex-col transition-all duration-300 ease-in-out`}
+                animate={{ width: collapsed ? 80 : 280 }}
+                className={`fixed md:relative top-0 left-0 z-[60] h-screen bg-slate-50/80 dark:bg-slate-950/40 backdrop-blur-2xl border-r border-slate-200 dark:border-white/10 flex flex-col transition-all duration-300 ease-in-out ${mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
                 style={{ width: collapsed ? 80 : 280 }}
             >
                 {/* Logo Area */}
@@ -106,7 +106,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                             <span className="text-white dark:text-slate-950 font-serif font-bold text-xl">L</span>
                         </div>
                         {!collapsed && (
-                            <span className="text-lg font-semibold tracking-wide text-slate-900 dark:text-white whitespace-nowrap overflow-hidden hidden md:block">
+                            <span className="text-lg font-semibold tracking-wide text-slate-900 dark:text-white whitespace-nowrap overflow-hidden">
                                 LYKAA <span className="text-violet-600 dark:text-violet-500 font-light hidden xl:inline">ACADEMY</span>
                             </span>
                         )}
@@ -139,7 +139,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                                     <Icon className="w-5 h-5 group-hover:drop-shadow-[0_0_8px_rgba(139,92,246,0.5)] transition-all duration-300" />
                                 </div>
                                 {!collapsed && (
-                                    <span className={`text-sm font-medium whitespace-nowrap hidden md:block ${isActive ? "text-slate-900 dark:text-white" : ""}`}>
+                                    <span className={`text-sm font-medium whitespace-nowrap ${isActive ? "text-slate-900 dark:text-white" : ""}`}>
                                         {translatedLabel}
                                     </span>
                                 )}
@@ -166,7 +166,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                             <span className="text-slate-700 dark:text-violet-500 text-sm font-bold">AJ</span>
                         </div>
                         {!collapsed && (
-                            <div className="hidden md:block w-[140px] overflow-hidden">
+                            <div className="w-[140px] overflow-hidden">
                                 <div className="text-slate-900 dark:text-white text-sm font-medium truncate">Admin Jane</div>
                                 <div className="text-slate-500 dark:text-zinc-500 text-xs truncate">Super Admin</div>
                             </div>
