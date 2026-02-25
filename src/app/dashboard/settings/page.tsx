@@ -80,7 +80,7 @@ export default function Settings() {
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Contact Email")}</label>
-                                            <input type="email" defaultValue="admin@lykaarealty.com" className="w-full bg-slate-50 dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500/50" />
+                                            <input type="email" defaultValue="admin@lykarealty.com" className="w-full bg-slate-50 dark:bg-black/50 border border-slate-300 dark:border-white/10 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:border-violet-500/50" />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t("Company Logo")}</label>

@@ -26,6 +26,7 @@ const ADMIN_NAV_ITEMS = [
 ];
 
 const USER_NAV_ITEMS = [
+    { href: "/dashboard/all-courses", label: "All Courses", icon: BookOpen },
     { href: "/dashboard/courses", label: "My Courses", icon: BookOpen },
     { href: "/dashboard/evaluations", label: "My Results", icon: ClipboardList },
     { href: "/dashboard/support", label: "Support Center", icon: ShieldAlert },
@@ -38,6 +39,7 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         "Access Requests": "Access Requests",
         "Manage Users": "Manage Users",
         "Manage Courses": "Manage Courses",
+        "All Courses": "All Courses",
         "Course Studio": "Course Studio",
         "Quiz Builder": "Quiz Builder",
         "Evaluations": "Evaluations",
