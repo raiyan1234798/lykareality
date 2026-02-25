@@ -1,12 +1,14 @@
 "use client";
 
-import { Save, Shield, Palette, Globe, Bell, UploadCloud, Trash2, Check, AlertTriangle } from "lucide-react";
+import { Save, Shield, Palette, Globe, Bell, UploadCloud, Trash2, Check, AlertTriangle, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
+import { useUserRole } from "@/hooks/useUserRole";
 
 export default function Settings() {
     const { t } = useLanguage();
+    const { isAdmin, loading } = useUserRole();
     const [activeTab, setActiveTab] = useState("general");
     const [isSaving, setIsSaving] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -28,6 +30,25 @@ export default function Settings() {
         { id: "security", label: t("Security & Access"), icon: Shield },
         { id: "notifications", label: t("Notifications"), icon: Bell },
     ];
+
+    if (loading) {
+        return (
+            <div className="w-full h-full min-h-[50vh] flex flex-col items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-violet-500 mb-4" />
+                <p className="text-sm text-slate-500 font-medium">Verifying access...</p>
+            </div>
+        );
+    }
+
+    if (!isAdmin) {
+        return (
+            <div className="w-full h-full min-h-[50vh] flex flex-col items-center justify-center">
+                <Shield className="w-12 h-12 text-rose-500 mb-4 opacity-50" />
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">{t("Access Restricted")}</h2>
+                <p className="text-sm text-slate-500 font-medium text-center">{t("You do not have permission to view or modify workspace settings.")}<br />{t("This area is restricted to administrators.")}</p>
+            </div>
+        );
+    }
 
     return (
         <div className="space-y-6">

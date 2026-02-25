@@ -30,7 +30,6 @@ const USER_NAV_ITEMS = [
     { href: "/dashboard/courses", label: "My Courses", icon: BookOpen },
     { href: "/dashboard/evaluations", label: "My Results", icon: ClipboardList },
     { href: "/dashboard/support", label: "Support Center", icon: ShieldAlert },
-    { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 const TRANSLATIONS: Record<string, Record<string, string>> = {
