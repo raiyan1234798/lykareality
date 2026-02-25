@@ -34,7 +34,7 @@ export default function Trust() {
 
     return (
         <section ref={ref} className="py-24 bg-zinc-950 border-y border-white/5 relative overflow-hidden">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
 
             <div className="container mx-auto px-6">
                 <div className="mb-16 text-center">
@@ -76,7 +76,7 @@ export default function Trust() {
                             <div className="text-4xl md:text-5xl font-bold text-white mb-2 font-serif flex items-center justify-center gap-1">
                                 <Counter end={stat.value} />{stat.suffix}
                             </div>
-                            <div className="text-gold-500/80 text-sm font-medium tracking-wide">{stat.label}</div>
+                            <div className="text-violet-500/80 text-sm font-medium tracking-wide">{stat.label}</div>
                         </motion.div>
                     ))}
                 </div>

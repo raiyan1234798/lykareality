@@ -18,7 +18,7 @@ export default function Hero() {
     const opacityHero = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
     return (
-        <div ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-blue-950">
+        <div ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950">
             {/* Background Image/Video representation with overlay */}
             <motion.div
                 className="absolute inset-0 z-0 bg-cover bg-center"
@@ -28,8 +28,8 @@ export default function Hero() {
                 }}
             />
             <div className="absolute inset-0 z-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-            <div className="absolute inset-0 z-0 bg-black/40" />
-            <div className="absolute inset-0 z-0 bg-gradient-to-r from-blue-950/90 to-transparent" />
+            <div className="absolute inset-0 z-0 bg-slate-950/40" />
+            <div className="absolute inset-0 z-0 bg-gradient-to-r from-slate-950/90 to-transparent" />
 
             <motion.div
                 className="container relative z-10 px-6 mx-auto"
@@ -41,7 +41,7 @@ export default function Hero() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                     >
-                        <span className="inline-block py-1 px-3 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-500 text-sm font-medium tracking-wider mb-6">
+                        <span className="inline-block py-1 px-3 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-500 text-sm font-medium tracking-wider mb-6">
                             LYKAA REALTY ACADEMY
                         </span>
                     </motion.div>
@@ -53,7 +53,7 @@ export default function Hero() {
                         transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
                     >
                         Master Real Estate. <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-gold-500 to-gold-600">
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-violet-500 to-violet-600">
                             Close Luxury Deals.
                         </span>
                     </motion.h1>
@@ -75,9 +75,9 @@ export default function Hero() {
                     >
                         <Link
                             href="/request-access"
-                            className="group relative inline-flex items-center justify-center px-8 py-4 bg-gold-500 text-blue-950 font-medium rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(212,175,55,0.5)]"
+                            className="group relative inline-flex items-center justify-center px-8 py-4 bg-violet-500 text-slate-950 font-medium rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(212,175,55,0.5)]"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-r from-gold-400 to-gold-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-violet-400 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                             <span className="relative z-10 flex items-center gap-2">
                                 Request Access
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -9,17 +9,17 @@ export default function WhyTrain() {
         {
             title: "High-Ticket Frameworks",
             desc: "Proven methodologies to handle objections and close ultra-luxury deals.",
-            icon: <TrendingUp className="w-8 h-8 text-gold-500" />
+            icon: <TrendingUp className="w-8 h-8 text-violet-500" />
         },
         {
             title: "Market Intelligence",
             desc: "Real-time data on off-plan launches, secondary markets, and global trends.",
-            icon: <Target className="w-8 h-8 text-gold-500" />
+            icon: <Target className="w-8 h-8 text-violet-500" />
         },
         {
             title: "Elite Network",
             desc: "Connect directly with top Dubai developers and channel partners.",
-            icon: <Handshake className="w-8 h-8 text-gold-500" />
+            icon: <Handshake className="w-8 h-8 text-violet-500" />
         }
     ];
 
@@ -37,7 +37,7 @@ export default function WhyTrain() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-gold-500 font-medium tracking-widest uppercase text-sm mb-4"
+                        className="text-violet-500 font-medium tracking-widest uppercase text-sm mb-4"
                     >
                         The Lykaa Advantage
                     </motion.h2>
@@ -64,15 +64,15 @@ export default function WhyTrain() {
                                 whileInView={{ opacity: 1 }}
                                 viewport={{ once: true, margin: "-50px" }}
                                 transition={{ duration: 0.6 }}
-                                className="group bg-card rounded-2xl p-10 border border-white/5 hover:border-gold-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-gold-500/5 relative overflow-hidden"
+                                className="group bg-card rounded-2xl p-10 border border-white/5 hover:border-violet-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/5 relative overflow-hidden"
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-gold-500/5 rounded-full blur-3xl group-hover:bg-gold-500/10 transition-colors" />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/5 rounded-full blur-3xl group-hover:bg-violet-500/10 transition-colors" />
 
-                                <div className="w-16 h-16 bg-blue-950/50 rounded-xl flex items-center justify-center mb-8 border border-white/10 group-hover:border-gold-500/30 transition-colors relative z-10">
+                                <div className="w-16 h-16 bg-slate-950/50 rounded-xl flex items-center justify-center mb-8 border border-white/10 group-hover:border-violet-500/30 transition-colors relative z-10">
                                     {card.icon}
                                 </div>
 
-                                <h4 className="text-2xl font-semibold text-foreground mb-4 relative z-10 group-hover:text-gold-400 transition-colors">{card.title}</h4>
+                                <h4 className="text-2xl font-semibold text-foreground mb-4 relative z-10 group-hover:text-violet-400 transition-colors">{card.title}</h4>
                                 <p className="text-zinc-400 leading-relaxed relative z-10 font-light">{card.desc}</p>
                             </motion.div>
                         );

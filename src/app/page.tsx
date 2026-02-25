@@ -9,7 +9,7 @@ import LoadingScreen from "@/components/ui/LoadingScreen";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background relative selection:bg-gold-500 selection:text-white">
+    <main className="min-h-screen bg-background relative selection:bg-violet-500 selection:text-white">
       <LoadingScreen />
       <Navbar />
       <Hero />
@@ -20,7 +20,7 @@ export default function Home() {
       <CTA />
 
       {/* Footer minimal */}
-      <footer className="bg-black py-12 border-t border-white/10 text-center text-zinc-500 text-sm">
+      <footer className="bg-slate-950 py-12 border-t border-white/10 text-center text-zinc-500 text-sm">
         <div className="container mx-auto px-6">
           <p>© {new Date().getFullYear()} Lykaa Realty Academy. Enterprise Training Edition.</p>
         </div>

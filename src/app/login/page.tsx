@@ -37,11 +37,11 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center relative overflow-hidden">
             {/* Background Aesthetics */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute top-0 right-0 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-gold-500/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-blue-950/40 rounded-full blur-[150px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-violet-500/10 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-slate-950/40 rounded-full blur-[150px] translate-y-1/2 -translate-x-1/2 pointer-events-none" />
             </div>
 
             <motion.div
@@ -51,11 +51,11 @@ export default function Login() {
                 className="relative z-10 w-full max-w-md p-8 sm:p-12 bg-zinc-950/60 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden"
             >
                 {/* Animated Accent Line */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-50" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-violet-500 to-transparent opacity-50" />
 
                 <div className="text-center mb-10">
-                    <Link href="/" className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-gold-400 to-gold-600 rounded-xl shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:scale-105 transition-transform mb-6">
-                        <span className="text-blue-950 font-serif font-bold text-3xl">L</span>
+                    <Link href="/" className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-violet-400 to-violet-600 rounded-xl shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:scale-105 transition-transform mb-6">
+                        <span className="text-slate-950 font-serif font-bold text-3xl">L</span>
                     </Link>
                     <h1 className="text-3xl font-bold text-white tracking-tight mb-2">Secure Gateway</h1>
                     <p className="text-zinc-400 text-sm">Enterprise portal for Lykaa consultants.</p>
@@ -70,7 +70,7 @@ export default function Login() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-4 text-white placeholder-zinc-500 focus:outline-none focus:border-gold-500/50 focus:bg-white/5 transition-all text-sm group-hover:border-white/20"
+                                className="w-full bg-slate-950/50 border border-white/10 rounded-lg px-4 py-4 text-white placeholder-zinc-500 focus:outline-none focus:border-violet-500/50 focus:bg-white/5 transition-all text-sm group-hover:border-white/20"
                             />
                         </div>
 
@@ -81,7 +81,7 @@ export default function Login() {
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-4 text-white placeholder-zinc-500 focus:outline-none focus:border-gold-500/50 focus:bg-white/5 transition-all text-sm group-hover:border-white/20"
+                                className="w-full bg-slate-950/50 border border-white/10 rounded-lg px-4 py-4 text-white placeholder-zinc-500 focus:outline-none focus:border-violet-500/50 focus:bg-white/5 transition-all text-sm group-hover:border-white/20"
                             />
                             <Lock className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-hover:text-zinc-400 transition-colors pointer-events-none" />
                         </div>
@@ -89,10 +89,10 @@ export default function Login() {
 
                     <div className="flex items-center justify-between text-xs">
                         <label className="flex items-center gap-2 cursor-pointer text-zinc-400 hover:text-white transition-colors">
-                            <input type="checkbox" className="rounded accent-gold-500 bg-black/50 border-white/10" />
+                            <input type="checkbox" className="rounded accent-violet-500 bg-slate-950/50 border-white/10" />
                             Remember me
                         </label>
-                        <a href="#" className="text-gold-500 hover:text-gold-400 transition-colors hover:underline">
+                        <a href="#" className="text-violet-500 hover:text-violet-400 transition-colors hover:underline">
                             Recovery
                         </a>
                     </div>
@@ -100,11 +100,11 @@ export default function Login() {
                     <button
                         type="submit"
                         disabled={isLoading || !email || !password}
-                        className="w-full py-4 bg-white text-black font-bold rounded-lg disabled:opacity-50 hover:bg-zinc-200 transition-all flex justify-center items-center gap-2 group relative overflow-hidden"
+                        className="w-full py-4 bg-white text-slate-950 font-bold rounded-lg disabled:opacity-50 hover:bg-zinc-200 transition-all flex justify-center items-center gap-2 group relative overflow-hidden"
                     >
-                        <div className="absolute inset-0 bg-gold-500 opacity-0 group-hover:opacity-10 transition-opacity" />
+                        <div className="absolute inset-0 bg-violet-500 opacity-0 group-hover:opacity-10 transition-opacity" />
                         {isLoading ? (
-                            <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: "linear", duration: 1 }} className="block w-5 h-5 border-2 border-black/20 border-t-black rounded-full" />
+                            <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: "linear", duration: 1 }} className="block w-5 h-5 border-2 border-slate-950/20 border-t-slate-950 rounded-full" />
                         ) : (
                             <>
                                 Authenticate <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

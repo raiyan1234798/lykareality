@@ -12,7 +12,7 @@ const InputField = ({ label, type = "text", value, onChange, required = true }: 
     return (
         <div className="relative mb-6">
             <label
-                className={`absolute left-0 transition-all duration-200 pointer-events-none ${isActive ? "-top-5 text-gold-500 text-xs font-semibold" : "top-3 text-zinc-500 text-sm font-light"
+                className={`absolute left-0 transition-all duration-200 pointer-events-none ${isActive ? "-top-5 text-violet-500 text-xs font-semibold" : "top-3 text-zinc-500 text-sm font-light"
                     } ${required ? "after:content-['*'] after:ml-0.5 after:text-red-500" : ""}`}
             >
                 {label}
@@ -24,7 +24,7 @@ const InputField = ({ label, type = "text", value, onChange, required = true }: 
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
                 required={required}
-                className="w-full bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-gold-500 transition-colors"
+                className="w-full bg-transparent border-b border-white/20 py-2 text-white focus:outline-none focus:border-violet-500 transition-colors"
             />
         </div>
     );
@@ -33,14 +33,14 @@ const InputField = ({ label, type = "text", value, onChange, required = true }: 
 const SelectField = ({ label, value, onChange, options, required = true }: any) => {
     return (
         <div className="relative mb-6">
-            <label className={`absolute left-0 -top-5 text-gold-500 text-xs font-semibold ${required ? "after:content-['*'] after:ml-0.5 after:text-red-500" : ""}`}>
+            <label className={`absolute left-0 -top-5 text-violet-500 text-xs font-semibold ${required ? "after:content-['*'] after:ml-0.5 after:text-red-500" : ""}`}>
                 {label}
             </label>
             <select
                 value={value}
                 onChange={onChange}
                 required={required}
-                className="w-full bg-zinc-900 border-b border-white/20 py-3 px-2 text-white focus:outline-none focus:border-gold-500 transition-colors rounded-sm appearance-none outline-none mt-2 text-sm"
+                className="w-full bg-zinc-900 border-b border-white/20 py-3 px-2 text-white focus:outline-none focus:border-violet-500 transition-colors rounded-sm appearance-none outline-none mt-2 text-sm"
             >
                 <option value="" disabled className="text-zinc-500">Select an option</option>
                 {options.map((opt: string) => (
@@ -79,28 +79,28 @@ export default function RequestAccess() {
     };
 
     return (
-        <div className="min-h-screen bg-blue-950 flex relative overflow-hidden">
+        <div className="min-h-screen bg-slate-950 flex relative overflow-hidden">
             {/* Background aesthetics */}
             <div className="absolute inset-0 z-0">
-                <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-gold-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-black/60 rounded-full blur-[100px]" />
+                <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-violet-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-slate-950/60 rounded-full blur-[100px]" />
             </div>
 
             <div className="flex-1 flex flex-col relative z-10 w-full lg:w-1/2 p-6 md:p-12 lg:p-24 justify-center max-w-2xl mx-auto">
                 <div className="mb-12">
-                    <Link href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold-500 transition-colors mb-8 text-sm group">
+                    <Link href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-violet-500 transition-colors mb-8 text-sm group">
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Home
                     </Link>
                     <div className="flex gap-2 items-center mb-4">
-                        <div className={`h-1 flex-1 rounded-full transition-colors duration-500 ${step >= 1 ? "bg-gold-500" : "bg-white/10"}`} />
-                        <div className={`h-1 flex-1 rounded-full transition-colors duration-500 ${step >= 2 ? "bg-gold-500" : "bg-white/10"}`} />
-                        <div className={`h-1 flex-1 rounded-full transition-colors duration-500 ${success ? "bg-gold-500" : "bg-white/10"}`} />
+                        <div className={`h-1 flex-1 rounded-full transition-colors duration-500 ${step >= 1 ? "bg-violet-500" : "bg-white/10"}`} />
+                        <div className={`h-1 flex-1 rounded-full transition-colors duration-500 ${step >= 2 ? "bg-violet-500" : "bg-white/10"}`} />
+                        <div className={`h-1 flex-1 rounded-full transition-colors duration-500 ${success ? "bg-violet-500" : "bg-white/10"}`} />
                     </div>
                     <h1 className="text-4xl font-bold text-white mb-2">Request Academy Access</h1>
                     <p className="text-zinc-400 font-light">Join Dubai's most exclusive real estate training platform.</p>
                 </div>
 
-                <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl relative">
+                <div className="bg-slate-950/40 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl relative">
                     <AnimatePresence mode="wait">
                         {!success ? (
                             <motion.div
@@ -156,10 +156,10 @@ export default function RequestAccess() {
                                                 <button
                                                     type="submit"
                                                     disabled={isSubmitting || !formData.country || !formData.experience || !formData.role}
-                                                    className="flex-1 py-4 bg-gradient-to-r from-gold-400 to-gold-600 text-blue-950 font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all flex justify-center items-center gap-2"
+                                                    className="flex-1 py-4 bg-gradient-to-r from-violet-400 to-violet-600 text-slate-950 font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all flex justify-center items-center gap-2"
                                                 >
                                                     {isSubmitting ? (
-                                                        <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: "linear", duration: 1 }} className="block w-5 h-5 border-2 border-blue-950/20 border-t-blue-950 rounded-full" />
+                                                        <motion.span animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: "linear", duration: 1 }} className="block w-5 h-5 border-2 border-slate-950/20 border-t-slate-950 rounded-full" />
                                                     ) : "Submit Application"}
                                                 </button>
                                             </div>
@@ -199,18 +199,18 @@ export default function RequestAccess() {
 
             {/* Decorative desktop side */}
             <div className="hidden lg:block lg:w-1/2 relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-950 to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950 to-transparent z-10" />
                 <div
                     className="absolute inset-0 bg-cover bg-left z-0"
                     style={{ backgroundImage: "url('https://images.unsplash.com/photo-1541888086925-0c13be456d35?q=80&w=2940&auto=format&fit=crop')" }}
                 />
-                <div className="absolute bottom-20 right-20 z-20 bg-black/40 backdrop-blur-xl border border-white/10 p-8 rounded-2xl max-w-sm">
-                    <div className="text-gold-500 font-serif text-4xl leading-none mb-2">"</div>
+                <div className="absolute bottom-20 right-20 z-20 bg-slate-950/40 backdrop-blur-xl border border-white/10 p-8 rounded-2xl max-w-sm">
+                    <div className="text-violet-500 font-serif text-4xl leading-none mb-2">"</div>
                     <p className="text-white text-lg font-light mb-4">
                         The difference between a good agent and a top producer is the knowledge they command and the network they leverage.
                     </p>
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-gold-500 font-bold text-sm">LR</div>
+                        <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center text-violet-500 font-bold text-sm">LR</div>
                         <div>
                             <div className="text-white text-sm font-semibold">Lykaa Realty Group</div>
                             <div className="text-zinc-500 text-xs">Director of Sales</div>

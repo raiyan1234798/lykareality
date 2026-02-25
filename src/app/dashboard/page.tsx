@@ -23,10 +23,10 @@ export default function Dashboard() {
                     <p className="text-zinc-400 text-sm">Welcome back. Here is your enterprise performance at a glance.</p>
                 </div>
                 <div className="flex gap-3">
-                    <button className="px-4 py-2 border border-white/10 text-white rounded-lg text-sm bg-black/40 hover:bg-white/5 transition-colors backdrop-blur-md">
+                    <button className="px-4 py-2 border border-white/10 text-white rounded-lg text-sm bg-slate-950/40 hover:bg-white/5 transition-colors backdrop-blur-md">
                         Export Report (.xlsx)
                     </button>
-                    <button className="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-blue-950 font-medium rounded-lg text-sm shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all">
+                    <button className="px-4 py-2 bg-violet-500 hover:bg-violet-400 text-slate-950 font-medium rounded-lg text-sm shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all">
                         Manage Data
                     </button>
                 </div>
@@ -42,15 +42,15 @@ export default function Dashboard() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1, duration: 0.5 }}
-                            className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 hover:border-gold-500/20 rounded-xl p-6 relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
+                            className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 hover:border-violet-500/20 rounded-xl p-6 relative overflow-hidden group hover:-translate-y-1 transition-all duration-300"
                         >
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-gold-500/5 rounded-full blur-2xl group-hover:bg-gold-500/10 transition-colors pointer-events-none" />
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-violet-500/5 rounded-full blur-2xl group-hover:bg-violet-500/10 transition-colors pointer-events-none" />
 
                             <div className="flex justify-between items-start mb-4">
-                                <div className="p-2 bg-blue-950/80 rounded border border-white/5 text-gold-500 group-hover:scale-110 transition-transform">
+                                <div className="p-2 bg-slate-950/80 rounded border border-white/5 text-violet-500 group-hover:scale-110 transition-transform">
                                     <Icon className="w-5 h-5" />
                                 </div>
-                                <div className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded bg-black/50 border border-white/5 ${kpi.isPositive ? "text-green-400" : "text-red-400"}`}>
+                                <div className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded bg-slate-950/50 border border-white/5 ${kpi.isPositive ? "text-green-400" : "text-red-400"}`}>
                                     {kpi.isPositive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                                     {kpi.change}
                                 </div>
@@ -85,7 +85,7 @@ export default function Dashboard() {
                                     initial={{ height: 0 }}
                                     animate={{ height: `${h}%` }}
                                     transition={{ delay: 0.5 + i * 0.05, duration: 1, ease: "easeOut" }}
-                                    className="w-[8%] bg-gradient-to-t from-gold-600/20 to-gold-400/80 rounded-t-sm"
+                                    className="w-[8%] bg-gradient-to-t from-violet-600/20 to-violet-400/80 rounded-t-sm"
                                 />
                             ))}
                         </div>
@@ -108,7 +108,7 @@ export default function Dashboard() {
                         {[1, 2, 3, 4, 5].map((item) => (
                             <div key={item} className="flex justify-between items-center group cursor-pointer p-2 hover:bg-white/5 rounded-lg transition-colors -mx-2">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded bg-blue-950 flex items-center justify-center border border-white/5 text-zinc-400 font-medium group-hover:text-gold-500 transition-colors">
+                                    <div className="w-10 h-10 rounded bg-slate-950 flex items-center justify-center border border-white/5 text-zinc-400 font-medium group-hover:text-violet-500 transition-colors">
                                         {String.fromCharCode(64 + item)}
                                     </div>
                                     <div>
@@ -116,7 +116,7 @@ export default function Dashboard() {
                                         <p className="text-zinc-500 text-xs">Property Consultant</p>
                                     </div>
                                 </div>
-                                <button className="text-gold-500 hover:text-white transition-colors text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button className="text-violet-500 hover:text-white transition-colors text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                                     Review
                                 </button>
                             </div>
