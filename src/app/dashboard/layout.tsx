@@ -12,6 +12,9 @@ import Chatbot from "@/components/ui/Chatbot";
 import { useTheme } from "next-themes";
 import { LanguageProvider, useLanguage, Language } from "@/lib/i18n";
 import { useUserRole } from "@/hooks/useUserRole";
+import { db, auth } from "@/lib/firebase";
+import { collection, query, where, onSnapshot, orderBy, limit } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 import { Logo } from "@/components/ui/Logo";
 
 const ADMIN_NAV_ITEMS = [
@@ -32,6 +35,8 @@ const USER_NAV_ITEMS = [
     { href: "/dashboard/evaluations", label: "My Results", icon: ClipboardList },
     { href: "/dashboard/support", label: "Support Center", icon: ShieldAlert },
 ];
+
+type Notification = { id: string; text: string; time: string; unread: boolean };
 
 const TRANSLATIONS: Record<string, Record<string, string>> = {
     EN: {
@@ -88,11 +93,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     const { theme, setTheme } = useTheme();
     const { language, setLanguage, t } = useLanguage();
     const [notificationsOpen, setNotificationsOpen] = useState(false);
-    const [notifications, setNotifications] = useState([
-        { id: 1, text: "New completely access request from Sarah", time: "2m ago", unread: true },
-        { id: 2, text: "User Ali opened a support ticket", time: "1h ago", unread: true },
-        { id: 3, text: "Course Off-Plan updated successfully", time: "2h ago", unread: false },
-    ]);
+    const [notifications, setNotifications] = useState<Notification[]>([]);
     const unreadCount = notifications.filter(n => n.unread).length;
     const [mounted, setMounted] = useState(false);
 
@@ -102,6 +103,63 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Dynamic notifications from Firestore
+    useEffect(() => {
+        if (!mounted) return;
+        const unsubs: (() => void)[] = [];
+
+        try {
+            if (isAdmin) {
+                // Admin: listen for pending access requests
+                const reqQ = query(collection(db, "users"), where("status", "==", "pending"));
+                unsubs.push(onSnapshot(reqQ, (snap) => {
+                    const reqNotifs: Notification[] = snap.docs.map(d => ({
+                        id: "req-" + d.id,
+                        text: `New access request from ${d.data().name || d.data().email || "a user"}`,
+                        time: "New",
+                        unread: true
+                    }));
+
+                    // Admin: listen for new support messages
+                    const msgQ = query(collection(db, "messages"), orderBy("updatedAt", "desc"), limit(5));
+                    const msgUnsub = onSnapshot(msgQ, (msgSnap) => {
+                        const msgNotifs: Notification[] = msgSnap.docs.map(d => ({
+                            id: "msg-" + d.id,
+                            text: `Message from ${d.data().userName || "User"}: "${(d.data().lastMsg || "").slice(0, 40)}${(d.data().lastMsg || "").length > 40 ? "..." : ""}"`,
+                            time: "Recent",
+                            unread: true
+                        }));
+                        setNotifications([...reqNotifs, ...msgNotifs]);
+                    }, () => {
+                        setNotifications(reqNotifs);
+                    });
+                    unsubs.push(msgUnsub);
+                }, () => { }));
+            } else {
+                // User: listen for admin replies to their support thread
+                const unsub = onAuthStateChanged(auth, (user) => {
+                    if (!user) return;
+                    const threadQ = query(collection(db, "messages", user.uid, "thread"), where("sender", "==", "admin"), orderBy("createdAt", "desc"), limit(3));
+                    const threadUnsub = onSnapshot(threadQ, (snap) => {
+                        const notifs: Notification[] = snap.docs.map(d => ({
+                            id: "reply-" + d.id,
+                            text: `Admin replied: "${(d.data().text || "").slice(0, 50)}${(d.data().text || "").length > 50 ? "..." : ""}"`,
+                            time: "Recent",
+                            unread: true
+                        }));
+                        setNotifications(notifs);
+                    }, () => { });
+                    unsubs.push(threadUnsub);
+                });
+                unsubs.push(unsub);
+            }
+        } catch (err) {
+            console.error("Notification listener error:", err);
+        }
+
+        return () => unsubs.forEach(u => u());
+    }, [mounted, isAdmin]);
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 flex overflow-hidden">
