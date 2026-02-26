@@ -25,6 +25,7 @@ export default function SupportCenter() {
     const [messages, setMessages] = useState<Msg[]>([]);
     const [text, setText] = useState("");
     const [search, setSearch] = useState("");
+    const [error, setError] = useState("");
 
     // Auth
     useEffect(() => {
@@ -47,7 +48,10 @@ export default function SupportCenter() {
             userEmail: me.email,
             lastMsg: "",
             updatedAt: serverTimestamp()
-        }, { merge: true });
+        }, { merge: true }).catch(err => {
+            console.error("Firestore setDoc error (messages):", err);
+            setError("Permission denied. Please ask admin to update Firestore rules.");
+        });
 
         setActiveChatId(chatDocId);
     }, [me, isAdmin]);
@@ -67,6 +71,9 @@ export default function SupportCenter() {
             }));
             setChats(data);
             if (data.length > 0 && !activeChatId) setActiveChatId(data[0].odid);
+        }, (err) => {
+            console.error("Firestore listen error (admin chats):", err);
+            setError("Could not load messages. Check Firestore rules.");
         });
         return () => unsub();
     }, [isAdmin, me]);
@@ -83,6 +90,8 @@ export default function SupportCenter() {
                 time: d.data().createdAt ? fmtTime(d.data().createdAt) : "now"
             })));
             setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+        }, (err) => {
+            console.error("Firestore listen error (thread):", err);
         });
         return () => unsub();
     }, [activeChatId]);
@@ -116,6 +125,32 @@ export default function SupportCenter() {
         c.userName.toLowerCase().includes(search.toLowerCase()) ||
         c.userEmail.toLowerCase().includes(search.toLowerCase())
     );
+
+    // ──────────────────────────
+    // ERROR BANNER
+    // ──────────────────────────
+    if (error) {
+        return (
+            <div className="space-y-6 h-full flex flex-col">
+                <header className="mb-2">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-1">{t("Support Center")}</h1>
+                </header>
+                <div className="bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30 rounded-xl p-6 text-center">
+                    <p className="text-rose-600 dark:text-rose-400 font-medium mb-2">{error}</p>
+                    <p className="text-sm text-slate-500 dark:text-zinc-400">Go to Firebase Console → Firestore → Rules and set:</p>
+                    <pre className="mt-3 bg-slate-100 dark:bg-slate-900 rounded-lg p-4 text-left text-xs text-slate-700 dark:text-zinc-300 overflow-x-auto">
+                        {`match /messages/{chatId} {
+  allow read, write: if request.auth != null;
+  match /thread/{msgId} {
+    allow read, write: if request.auth != null;
+  }
+}`}
+                    </pre>
+                    <button onClick={() => setError("")} className="mt-4 px-4 py-2 bg-violet-600 text-white rounded-lg text-sm hover:bg-violet-700 transition-colors">Try Again</button>
+                </div>
+            </div>
+        );
+    }
 
     // ──────────────────────────
     // USER: simple chat with admin
