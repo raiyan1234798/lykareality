@@ -264,7 +264,12 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         "More options": "More options",
         "Stop": "Stop",
         "Users will type their answer. It will be verified against what you enter above.": "Users will type their answer. It will be verified against what you enter above.",
-        "Save Settings": "Save Settings"
+        "Save Settings": "Save Settings",
+        "Lyka Admin Support": "Lyka Admin Support",
+        "Online": "Online",
+        "Send a message to start a conversation with admin.": "Send a message to start a conversation with admin.",
+        "No support tickets yet.": "No support tickets yet.",
+        "Thank you for your message. An admin will get back to you shortly.": "Thank you for your message. An admin will get back to you shortly."
     },
     AR: {
         "Analytics Dashboard": "لوحة التحليلات",
@@ -519,7 +524,12 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         "More options": "المزيد من الخيارات",
         "Stop": "إيقاف",
         "Users will type their answer. It will be verified against what you enter above.": "سيكتب المستخدمون إجابتهم. سيتم التحقق منها مقابل ما تدخله أعلاه.",
-        "Save Settings": "حفظ الإعدادات"
+        "Save Settings": "حفظ الإعدادات",
+        "Lyka Admin Support": "دعم مشرف لايكا",
+        "Online": "متصل",
+        "Send a message to start a conversation with admin.": "أرسل رسالة لبدء محادثة مع المشرف.",
+        "No support tickets yet.": "لا توجد تذاكر دعم حتى الآن.",
+        "Thank you for your message. An admin will get back to you shortly.": "شكراً لرسالتك. سيتواصل معك مشرف قريباً."
     },
     HI: {
         "Analytics Dashboard": "एनालिटिक्स डैशबोर्ड",
@@ -774,7 +784,12 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
         "More options": "अधिक विकल्प",
         "Stop": "रुकें",
         "Users will type their answer. It will be verified against what you enter above.": "उपयोगकर्ता अपना उत्तर टाइप करेंगे। इसे आपके द्वारा ऊपर दर्ज किए गए उत्तर से सत्यापित किया जाएगा।",
-        "Save Settings": "सेटिंग्स सहेजें"
+        "Save Settings": "सेटिंग्स सहेजें",
+        "Lyka Admin Support": "लायका एडमिन सपोर्ट",
+        "Online": "ऑनलाइन",
+        "Send a message to start a conversation with admin.": "व्यवस्थापक से बातचीत शुरू करने के लिए एक संदेश भेजें।",
+        "No support tickets yet.": "अभी तक कोई सहायता टिकट नहीं।",
+        "Thank you for your message. An admin will get back to you shortly.": "आपके संदेश के लिए धन्यवाद। एक व्यवस्थापक जल्द ही आपसे संपर्क करेगा।"
     }
 };
 
