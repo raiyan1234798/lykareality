@@ -5,8 +5,8 @@ import { ArrowUpRight } from "lucide-react";
 import { useRef } from "react";
 
 const segments = [
-    { title: "Luxury Villas", image: "https://images.unsplash.com/photo-1613490908592-15f79b699e1a?q=80&w=2940&auto=format&fit=crop" },
-    { title: "Waterfront Apartments", image: "https://images.unsplash.com/photo-1549887534-11075d9e50e9?q=80&w=2940&auto=format&fit=crop" },
+    { title: "Luxury Villas", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2940&auto=format&fit=crop" },
+    { title: "Waterfront Apartments", image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2940&auto=format&fit=crop" },
     { title: "Off-plan Projects", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2940&auto=format&fit=crop" },
     { title: "Global Investments", image: "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2940&auto=format&fit=crop" },
 ];
