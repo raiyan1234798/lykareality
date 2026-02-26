@@ -127,9 +127,9 @@ export default function ManageCourses() {
                                         </button>
                                     </>
                                 ) : (
-                                    <button className="w-full py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    <Link href="/dashboard/course" className="w-full py-1.5 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
                                         <PlayCircle className="w-4 h-4" /> {t("Start Learning")}
-                                    </button>
+                                    </Link>
                                 )}
                             </div>
                         </div>

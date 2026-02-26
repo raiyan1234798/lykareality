@@ -3,6 +3,7 @@
 import { BookOpen, Star, Clock, Lock } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useLanguage } from "@/lib/i18n";
 import { useUserRole } from "@/hooks/useUserRole";
 
@@ -95,9 +96,9 @@ export default function AllCourses() {
                                         {t("Waiting for Admin...")}
                                     </button>
                                 ) : (
-                                    <button className="w-full py-1.5 bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    <Link href="/dashboard/courses" className="w-full py-1.5 bg-slate-100 dark:bg-white/5 text-slate-800 dark:text-white text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2">
                                         {t("Go to My Courses")}
-                                    </button>
+                                    </Link>
                                 )}
                             </div>
                         </div>

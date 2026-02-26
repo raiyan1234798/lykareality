@@ -33,9 +33,33 @@ export default function Login() {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
 
-            // Check if user exists in Firestore
             const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
+            let userSnap = await getDoc(userRef);
+
+            // If user uid doc doesn't exist, check by email (in case they were pre-approved)
+            if (!userSnap.exists()) {
+                const { collection, query, where, getDocs, deleteDoc } = await import("firebase/firestore");
+                const q = query(collection(db, "users"), where("email", "==", user.email));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    const existingDoc = querySnapshot.docs[0];
+                    const userData = existingDoc.data();
+
+                    // Create canonical uid-based document
+                    await setDoc(userRef, {
+                        ...userData,
+                        uid: user.uid,
+                        photoURL: user.photoURL,
+                    }, { merge: true });
+
+                    // Cleanup old invite document if keys don't match
+                    if (existingDoc.id !== user.uid) {
+                        await deleteDoc(doc(db, "users", existingDoc.id));
+                    }
+                    userSnap = await getDoc(userRef);
+                }
+            }
 
             if (userSnap.exists()) {
                 const userData = userSnap.data();

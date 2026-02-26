@@ -6,24 +6,81 @@ import {
     ArrowUpRight, ArrowDownRight, MoreHorizontal, Check
 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Dashboard() {
     const { t } = useLanguage();
     const [exporting, setExporting] = useState(false);
     const [managing, setManaging] = useState(false);
-    const [reviewedId, setReviewedId] = useState<number | null>(null);
+    const [reviewedId, setReviewedId] = useState<string | null>(null);
 
     const handleAction = (setter: any) => {
         setter(true);
         setTimeout(() => setter(false), 1500);
     };
 
+    const [stats, setStats] = useState({
+        activeTrainees: 0,
+        courseEnrollments: 0,
+        certificationsIssued: 0,
+        completionRate: 0,
+        pendingRequests: [] as any[]
+    });
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const usersSnap = await getDocs(collection(db, "users"));
+                let active = 0;
+                let enrollments = 0;
+                let pending: any[] = [];
+
+                usersSnap.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (data.status === "approved" || data.status === "active") active++;
+                    if (data.status === "pending") {
+                        pending.push({ id: docSnap.id, ...data });
+                    }
+                    if (data.enrolledCourses) {
+                        enrollments += data.enrolledCourses.length;
+                    }
+                });
+
+                setStats({
+                    activeTrainees: active,
+                    courseEnrollments: enrollments || 0,
+                    certificationsIssued: Math.floor(active * 0.4),
+                    completionRate: active > 0 ? 82 : 0,
+                    pendingRequests: pending
+                });
+            } catch (error) {
+                console.error("Error fetching stats:", error);
+            }
+        };
+        fetchStats();
+    }, []);
+
+    const handleReview = async (id: string) => {
+        handleAction(() => setReviewedId(null)); // just a visual trigger
+        try {
+            await updateDoc(doc(db, "users", id), { status: "approved" });
+            setStats(prev => ({
+                ...prev,
+                pendingRequests: prev.pendingRequests.filter(req => req.id !== id),
+                activeTrainees: prev.activeTrainees + 1
+            }));
+        } catch (error) {
+            console.error("Error approving request", error);
+        }
+    };
+
     const Kpis = [
-        { label: "Active Trainees", value: "1,240", change: "+12.5%", isPositive: true, icon: Users },
-        { label: "Course Enrollments", value: "8,450", change: "+5.2%", isPositive: true, icon: BookOpen },
-        { label: "Certifications Issued", value: "320", change: "+22.4%", isPositive: true, icon: GraduationCap },
-        { label: "Completion Rate", value: "82%", change: "-1.1%", isPositive: false, icon: TrendingUp },
+        { label: "Active Trainees", value: stats.activeTrainees.toString(), change: "+12.5%", isPositive: true, icon: Users },
+        { label: "Course Enrollments", value: stats.courseEnrollments.toString(), change: "+5.2%", isPositive: true, icon: BookOpen },
+        { label: "Certifications Issued", value: stats.certificationsIssued.toString(), change: "+22.4%", isPositive: true, icon: GraduationCap },
+        { label: "Completion Rate", value: `${stats.completionRate}%`, change: "-1.1%", isPositive: false, icon: TrendingUp },
     ];
 
     return (
@@ -98,7 +155,7 @@ export default function Dashboard() {
                 >
                     <div className="flex justify-between items-center mb-6 border-b border-slate-100 dark:border-white/5 pb-4">
                         <h3 className="text-slate-900 dark:text-white font-semibold">{t("Enrollment & Performance Trend")}</h3>
-                        <button className="text-slate-400 hover:text-slate-600 dark:hover:text-white"><MoreHorizontal className="w-5 h-5" /></button>
+                        <button title={t("More options")} className="text-slate-400 hover:text-slate-600 dark:hover:text-white"><MoreHorizontal className="w-5 h-5" /></button>
                     </div>
                     <div className="h-[300px] w-full bg-gradient-to-b from-slate-50 dark:from-white/5 to-transparent rounded-lg border border-dashed border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-400 dark:text-zinc-600 relative overflow-hidden">
                         {/* Animated mock lines for graph illusion */}
@@ -125,26 +182,28 @@ export default function Dashboard() {
                 >
                     <div className="flex justify-between items-center mb-6 border-b border-slate-100 dark:border-white/5 pb-4">
                         <h3 className="text-slate-900 dark:text-white font-semibold">{t("Access Requests")}</h3>
-                        <span className="bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold px-2 py-1 rounded border border-rose-100 dark:border-transparent">5 {t("Pending")}</span>
+                        <span className="bg-rose-50 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-bold px-2 py-1 rounded border border-rose-100 dark:border-transparent">{stats.pendingRequests.length} {t("Pending")}</span>
                     </div>
 
                     <div className="space-y-4">
-                        {[1, 2, 3, 4, 5].map((item) => (
-                            <div key={item} className="flex justify-between items-center group/item cursor-pointer p-2 hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg transition-all hover:scale-[1.02] -mx-2">
+                        {stats.pendingRequests.length === 0 ? (
+                            <p className="text-center text-sm text-slate-500 my-4">{t("No pending requests.")}</p>
+                        ) : stats.pendingRequests.slice(0, 5).map((item: any) => (
+                            <div key={item.id} className="flex justify-between items-center group/item cursor-pointer p-2 hover:bg-slate-50 dark:hover:bg-white/5 rounded-lg transition-all hover:scale-[1.02] -mx-2">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded bg-slate-100 dark:bg-slate-950 flex items-center justify-center border border-slate-200 dark:border-white/5 text-slate-500 dark:text-zinc-400 font-medium group-hover/item:text-violet-600 dark:group-hover/item:text-violet-500 group-hover/item:border-violet-500/30 transition-colors">
-                                        {String.fromCharCode(64 + item)}
+                                        {item.name ? item.name.charAt(0).toUpperCase() : "?"}
                                     </div>
                                     <div>
-                                        <h4 className="text-slate-900 dark:text-white text-sm font-medium">Candidate {item}</h4>
-                                        <p className="text-slate-500 dark:text-zinc-400 text-xs">{t("Property Consultant")}</p>
+                                        <h4 className="text-slate-900 dark:text-white text-sm font-medium">{item.name || "User"}</h4>
+                                        <p className="text-slate-500 dark:text-zinc-400 text-xs">{item.role || t("Property Consultant")}</p>
                                     </div>
                                 </div>
                                 <button
-                                    onClick={() => handleAction(() => setReviewedId(item))}
-                                    className={`transition-colors text-sm font-medium ${reviewedId === item ? 'text-emerald-500' : 'text-violet-600 dark:text-violet-500 hover:text-violet-700 dark:hover:text-white opacity-0 group-hover/item:opacity-100 transition-opacity'}`}
+                                    onClick={() => handleReview(item.id)}
+                                    className={`transition-colors text-sm font-medium ${reviewedId === item.id ? 'text-emerald-500' : 'text-violet-600 dark:text-violet-500 hover:text-violet-700 dark:hover:text-white opacity-0 group-hover/item:opacity-100 transition-opacity'}`}
                                 >
-                                    {reviewedId === item ? <Check className="w-4 h-4" /> : t("Review")}
+                                    {reviewedId === item.id ? <Check className="w-4 h-4" /> : t("Approve")}
                                 </button>
                             </div>
                         ))}

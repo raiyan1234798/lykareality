@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PlayCircle, CheckCircle2, Lock, FileText, ChevronRight, MessageSquare, Play, Pause, Maximize, Settings2 } from "lucide-react";
+import { PlayCircle, CheckCircle2, Lock, FileText, ChevronRight, MessageSquare, Maximize, Settings2 } from "lucide-react";
 import { useState } from "react";
 
-type Lesson = { id: number, title: string, duration: string, active?: boolean, completed?: boolean, locked?: boolean, type?: string };
+type Lesson = { id: number, title: string, duration: string, videoId?: string, type?: "video" | "quiz" };
 type Module = { id: number, title: string, duration: string, lessons: Lesson[] };
 
 const MODULES: Module[] = [
@@ -13,9 +13,9 @@ const MODULES: Module[] = [
         title: "The Lyka Foundation",
         duration: "45m",
         lessons: [
-            { id: 101, title: "Welcome to Elite Real Estate", duration: "12:30", completed: true },
-            { id: 102, title: "Brand Positioning & The Investor Mindset", duration: "18:45", active: true },
-            { id: 103, title: "Navigating the Dubai Masterplan", duration: "14:15", locked: true },
+            { id: 101, title: "Welcome to Elite Real Estate", duration: "2:30", videoId: "tO01J-M3g0U", type: "video" },
+            { id: 102, title: "Brand Positioning & The Investor Mindset", duration: "18:45", videoId: "gG22XNhtnoY", type: "video" },
+            { id: 103, title: "Module 1 Assessment", duration: "5:00", type: "quiz" },
         ]
     },
     {
@@ -23,68 +23,133 @@ const MODULES: Module[] = [
         title: "Off-Plan Mastery",
         duration: "2h 15m",
         lessons: [
-            { id: 201, title: "Analyzing Developer Portfolios", duration: "24:00", locked: true },
-            { id: 202, title: "Selling the Vision", duration: "32:10", locked: true },
-            { id: 203, title: "Quiz: Phase One Checkpoint", duration: "15:00", type: "quiz", locked: true },
+            { id: 201, title: "Analyzing Developer Portfolios", duration: "24:00", videoId: "LXb3EKWsInQ", type: "video" },
+            { id: 202, title: "Selling the Vision", duration: "32:10", videoId: "xcJtL7QggTI", type: "video" },
+            { id: 203, title: "Phase Two Checkpoint", duration: "15:00", type: "quiz" },
         ]
     }
 ];
 
 export default function CourseLearningEngine() {
-    const [isPlaying, setIsPlaying] = useState(false);
     const [activeTab, setActiveTab] = useState("overview");
+    const [activeLessonId, setActiveLessonId] = useState(101);
+
+    // Quiz state
+    const [quizStarted, setQuizStarted] = useState(false);
+    const [quizSubmitted, setQuizSubmitted] = useState(false);
+    const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+
+    // Find active lesson
+    let activeLesson: Lesson | undefined;
+    for (const mod of MODULES) {
+        const found = mod.lessons.find(l => l.id === activeLessonId);
+        if (found) activeLesson = found;
+    }
 
     return (
         <div className="flex flex-col xl:flex-row gap-6 h-[calc(100vh-8rem)]">
-            {/* Main Video Area */}
+            {/* Main Content Area */}
             <div className="flex-1 flex flex-col gap-6 overflow-y-auto custom-scrollbar pr-2">
-                <div className="relative aspect-video bg-slate-950 rounded-2xl overflow-hidden border border-white/5 shadow-2xl group">
-                    <img
-                        src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2670&auto=format&fit=crop"
-                        alt="Video Thumbnail"
-                        className="w-full h-full object-cover opacity-60 pointer-events-none"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-slate-950/20 to-transparent pointer-events-none" />
+                <div className="relative aspect-video bg-slate-950 rounded-2xl overflow-hidden border border-white/5 shadow-2xl group flex items-center justify-center">
 
-                    {/* Custom Video Player UI Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <button
-                            onClick={() => setIsPlaying(!isPlaying)}
-                            className="w-20 h-20 bg-violet-500/90 text-slate-950 rounded-full flex items-center justify-center hover:scale-110 hover:bg-violet-400 transition-all shadow-[0_0_40px_rgba(212,175,55,0.4)] pointer-events-auto backdrop-blur-md"
-                        >
-                            {isPlaying ? <Pause className="w-8 h-8" /> : <Play className="w-8 h-8 ml-1" />}
-                        </button>
-                    </div>
+                    {activeLesson?.type === "quiz" ? (
+                        <div className="w-full h-full p-8 flex flex-col bg-slate-900 overflow-y-auto">
+                            {!quizStarted ? (
+                                <div className="m-auto text-center max-w-md">
+                                    <FileText className="w-16 h-16 text-violet-500 mx-auto mb-6" />
+                                    <h2 className="text-2xl font-bold text-white mb-4">{activeLesson.title}</h2>
+                                    <p className="text-slate-400 mb-8">This assessment evaluates your understanding of the preceding lessons. You need 80% to pass.</p>
+                                    <button
+                                        onClick={() => setQuizStarted(true)}
+                                        className="px-8 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-lg font-bold transition-all"
+                                    >
+                                        Start Assessment
+                                    </button>
+                                </div>
+                            ) : !quizSubmitted ? (
+                                <div className="max-w-2xl w-full mx-auto py-8">
+                                    <h3 className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-4">Question 1 of 1</h3>
+                                    <h2 className="text-xl md:text-2xl font-medium text-white mb-8">What is the most critical factor when pitching an off-plan property to a high-net-worth investor?</h2>
 
-                    <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent flex flex-col gap-4">
-                        <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden cursor-pointer relative group/progress">
-                            <div className="absolute top-0 left-0 h-full w-[35%] bg-violet-500" />
-                            <div className="absolute top-1/2 left-[35%] -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,1)] opacity-0 group-hover/progress:opacity-100 transition-opacity" />
+                                    <div className="space-y-4 mb-8">
+                                        {[
+                                            "The floorplan nuances and marble finishes",
+                                            "The developer's legacy, community vision, and capital appreciation potential",
+                                            "Offering the highest discount possible",
+                                            "The exact handover date and post-handover payment plan"
+                                        ].map((ans, idx) => (
+                                            <div
+                                                key={idx}
+                                                onClick={() => setSelectedAnswer(idx)}
+                                                className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedAnswer === idx ? 'border-violet-500 bg-violet-500/10 text-white' : 'border-slate-800 hover:border-slate-600 text-slate-300'}`}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${selectedAnswer === idx ? 'border-violet-500' : 'border-slate-600'}`}>
+                                                        {selectedAnswer === idx && <div className="w-3 h-3 bg-violet-500 rounded-full" />}
+                                                    </div>
+                                                    <span className="font-medium text-sm md:text-base">{ans}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        onClick={() => setQuizSubmitted(true)}
+                                        disabled={selectedAnswer === null}
+                                        className="w-full py-4 bg-violet-600 disabled:opacity-50 text-white font-bold rounded-xl transition-all hover:bg-violet-700"
+                                    >
+                                        Submit Answer
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="m-auto text-center max-w-md">
+                                    {(selectedAnswer === 1) ? (
+                                        <>
+                                            <CheckCircle2 className="w-20 h-20 text-emerald-500 mx-auto mb-6" />
+                                            <h2 className="text-3xl font-bold text-white mb-2">Passed!</h2>
+                                            <p className="text-slate-400 mb-8">Excellent work. You nailed the investor psychology.</p>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FileText className="w-20 h-20 text-rose-500 mx-auto mb-6" />
+                                            <h2 className="text-3xl font-bold text-white mb-2">Needs Review</h2>
+                                            <p className="text-slate-400 mb-8">Review the course material and try again. Don't focus only on features.</p>
+                                        </>
+                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setQuizStarted(false);
+                                            setQuizSubmitted(false);
+                                            setSelectedAnswer(null);
+                                        }}
+                                        className="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-bold transition-all"
+                                    >
+                                        Return to Lesson
+                                    </button>
+                                </div>
+                            )}
                         </div>
-
-                        <div className="flex justify-between items-center text-white">
-                            <div className="flex items-center gap-4 text-sm">
-                                <button className="hover:text-violet-500 transition-colors pointer-events-auto" onClick={() => setIsPlaying(!isPlaying)}>
-                                    {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-                                </button>
-                                <div className="font-mono text-xs text-zinc-300 pointer-events-none">04:22 / 18:45</div>
-                            </div>
-                            <div className="flex items-center gap-4 text-zinc-400 pointer-events-auto">
-                                <button className="text-xs font-semibold px-2 border border-white/20 rounded hover:border-violet-500 hover:text-violet-500 transition-colors">1x</button>
-                                <button className="hover:text-white transition-colors"><Settings2 className="w-5 h-5" /></button>
-                                <button className="hover:text-white transition-colors"><Maximize className="w-5 h-5" /></button>
-                            </div>
-                        </div>
-                    </div>
+                    ) : (
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src={`https://www.youtube.com/embed/${activeLesson?.videoId}?autoplay=0&rel=0`}
+                            title={activeLesson?.title}
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="bg-black"
+                        ></iframe>
+                    )}
                 </div>
 
                 {/* Course Info */}
                 <div className="bg-zinc-900/50 backdrop-blur-xl border border-white/5 rounded-2xl p-6 md:p-8">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                         <div>
-                            <div className="text-violet-500 font-medium tracking-wide text-xs uppercase mb-2">Module 1 • Lesson 2</div>
-                            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Brand Positioning & The Investor Mindset</h1>
-                            <p className="text-zinc-400 text-sm">Understanding what high-net-worth individuals look for beyond the developer brochure.</p>
+                            <div className="text-violet-500 font-medium tracking-wide text-xs uppercase mb-2">Active Lesson</div>
+                            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">{activeLesson?.title}</h1>
+                            <p className="text-zinc-400 text-sm">Understanding premium real estate sales and client relations.</p>
                         </div>
                         <button className="shrink-0 px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-medium rounded-lg text-sm transition-colors border border-white/10">
                             Download Resources
@@ -109,9 +174,8 @@ export default function CourseLearningEngine() {
                     <div className="text-zinc-400 text-sm leading-relaxed font-light min-h-[150px]">
                         {activeTab === "overview" && (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                                In this session, you will learn how to transition from selling features to selling a legacy.
-                                We explore the psychological triggers of luxury buying, emphasizing exclusivity, capital appreciation, and lifestyle architecture.
-                                You will also review case studies of top performing agents who closed AED 50M+ properties by altering their positioning strategy.
+                                In this module session, you will explore the best practices and foundational knowledge required.
+                                We dive into real-world scenarios, exclusive insights, and practical steps you can take today to elevate your pitch.
                             </motion.div>
                         )}
                         {activeTab === "transcript" && (
@@ -124,7 +188,7 @@ export default function CourseLearningEngine() {
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4">
                                 <textarea
                                     className="w-full bg-slate-950/50 border border-white/10 rounded-lg p-4 text-white placeholder-zinc-600 focus:outline-none focus:border-violet-500 text-sm resize-none min-h-[100px]"
-                                    placeholder="Private notes tied to this timestamp (04:22)..."
+                                    placeholder="Enter your personal notes here..."
                                 />
                                 <div className="flex justify-end">
                                     <button className="px-4 py-2 bg-slate-950 border border-white/10 hover:border-violet-500 text-white rounded text-xs transition-colors">Save Note</button>
@@ -158,28 +222,34 @@ export default function CourseLearningEngine() {
                                 <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
                             </div>
                             <div className="px-2 pb-2">
-                                {module.lessons.map(lesson => (
-                                    <div
-                                        key={lesson.id}
-                                        className={`flex items-start gap-3 p-3 rounded-lg border border-transparent transition-all mb-1 ${lesson.active ? "bg-slate-900/30 border-blue-500/30" :
-                                            lesson.completed ? "hover:bg-white/5 cursor-pointer" :
-                                                "opacity-50 cursor-not-allowed bg-slate-950/50"
-                                            }`}
-                                    >
-                                        <div className="shrink-0 mt-0.5">
-                                            {lesson.active ? <PlayCircle className="w-5 h-5 text-violet-500 animate-pulse" /> :
-                                                lesson.completed ? <CheckCircle2 className="w-5 h-5 text-green-500" /> :
+                                {module.lessons.map(lesson => {
+                                    const isActive = lesson.id === activeLessonId;
+                                    return (
+                                        <div
+                                            key={lesson.id}
+                                            onClick={() => {
+                                                setActiveLessonId(lesson.id);
+                                                setQuizStarted(false);
+                                                setQuizSubmitted(false);
+                                                setSelectedAnswer(null);
+                                            }}
+                                            className={`flex items-start gap-3 p-3 rounded-lg border border-transparent transition-all mb-1 cursor-pointer
+                                                ${isActive ? "bg-slate-900/30 border-blue-500/30 ring-1 ring-violet-500/50" : "hover:bg-white/5"}`}
+                                        >
+                                            <div className="shrink-0 mt-0.5">
+                                                {isActive ? <PlayCircle className="w-5 h-5 text-violet-500 animate-pulse" /> :
                                                     lesson.type === 'quiz' ? <FileText className="w-5 h-5 text-zinc-500" /> :
-                                                        <Lock className="w-5 h-5 text-zinc-500" />}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className={`text-sm truncate font-medium ${lesson.active ? "text-violet-500" : "text-zinc-300"}`}>{lesson.title}</div>
-                                            <div className="text-xs text-zinc-500 flex items-center gap-2 mt-1">
-                                                {lesson.type === 'quiz' ? 'Evaluation' : 'Video Module'} • {lesson.duration}
+                                                        <PlayCircle className="w-5 h-5 text-zinc-500" />}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className={`text-sm truncate font-medium ${isActive ? "text-violet-500" : "text-zinc-300"}`}>{lesson.title}</div>
+                                                <div className="text-xs text-zinc-500 flex items-center gap-2 mt-1">
+                                                    {lesson.type === 'quiz' ? 'Evaluation' : 'Video Module'} • {lesson.duration}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         </div>
                     ))}
