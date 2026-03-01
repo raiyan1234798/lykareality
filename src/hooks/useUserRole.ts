@@ -15,6 +15,12 @@ export function useUserRole() {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
+                    if (user.email === "abubackerraiyan@gmail.com") {
+                        setRole("admin");
+                        setLoading(false);
+                        return;
+                    }
+
                     const userRef = doc(db, "users", user.uid);
                     const userSnap = await getDoc(userRef);
                     if (userSnap.exists()) {
