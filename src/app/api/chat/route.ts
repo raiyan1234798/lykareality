@@ -51,10 +51,17 @@ Personality: Professional, elite, highly knowledgeable, concise, and helpful. Yo
             return NextResponse.json({ error: "Invalid messages array" }, { status: 400 });
         }
 
-        const history = messages.slice(0, -1).map((m: any) => ({
+        let history = messages.slice(0, -1).map((m: any) => ({
             role: m.role,
             parts: [{ text: m.text }]
         }));
+
+        // Gemini SDK requires the conversation history to start with a 'user' message.
+        // If our state seeded the array with a 'model' greeting, we must strip it from the formal history array.
+        while (history.length > 0 && history[0].role === "model") {
+            history.shift();
+        }
+
         const latestMessage = messages[messages.length - 1].text;
 
         const chat = model.startChat({ history });
