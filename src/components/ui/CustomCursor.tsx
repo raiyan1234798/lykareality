@@ -8,8 +8,10 @@ export default function CustomCursor() {
     const [isHovering, setIsHovering] = useState(false);
     const [isClicking, setIsClicking] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
         const updateMousePosition = (e: MouseEvent) => {
             setMousePosition({ x: e.clientX, y: e.clientY });
             if (!isVisible) setIsVisible(true);
@@ -52,7 +54,7 @@ export default function CustomCursor() {
         };
     }, [isVisible]);
 
-    if (typeof window === "undefined") return null;
+    if (!isMounted) return null;
 
     const variants = {
         default: {
