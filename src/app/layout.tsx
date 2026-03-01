@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: "Enterprise-grade real estate learning platform for Lyka Realty.",
 };
 
+import CustomCursor from "@/components/ui/CustomCursor";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,6 +27,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           {children}
+          <CustomCursor />
         </ThemeProvider>
       </body>
     </html>
