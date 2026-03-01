@@ -168,7 +168,7 @@ export default function AccessRequests() {
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-700 dark:text-white font-bold">
-                                                {req.name.charAt(0)}
+                                                {(req.name || "U").toString().charAt(0).toUpperCase()}
                                             </div>
                                             <div>
                                                 <h4 className="text-slate-900 dark:text-white font-medium">{req.name}</h4>

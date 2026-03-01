@@ -122,8 +122,8 @@ export default function SupportCenter() {
 
     const activeChat = chats.find(c => c.odid === activeChatId);
     const filtered = chats.filter(c =>
-        c.userName.toLowerCase().includes(search.toLowerCase()) ||
-        c.userEmail.toLowerCase().includes(search.toLowerCase())
+        (c.userName || "").toString().toLowerCase().includes(search.toLowerCase()) ||
+        (c.userEmail || "").toString().toLowerCase().includes(search.toLowerCase())
     );
 
     // ──────────────────────────

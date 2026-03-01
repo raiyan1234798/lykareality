@@ -64,8 +64,8 @@ export default function ManageUsers() {
     }, []);
 
     const filteredUsers = users.filter(u =>
-        u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        u.email.toLowerCase().includes(searchQuery.toLowerCase())
+        (u.name || "").toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (u.email || "").toString().toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const formatTime = (timestamp: any) => {
@@ -228,7 +228,7 @@ export default function ManageUsers() {
                                                     <img src={user.photoURL} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
                                                 ) : (
                                                     <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center shrink-0">
-                                                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{user.name.charAt(0).toUpperCase()}</span>
+                                                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400">{(user.name || "U").toString().charAt(0).toUpperCase()}</span>
                                                     </div>
                                                 )}
                                                 <div>
