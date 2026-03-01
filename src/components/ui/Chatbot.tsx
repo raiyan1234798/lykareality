@@ -3,10 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send, User, Bot, Loader2 } from "lucide-react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || "");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+import { useUserRole } from "@/hooks/useUserRole";
 
 type Message = {
     role: "user" | "model";
@@ -14,6 +11,7 @@ type Message = {
 };
 
 export default function Chatbot() {
+    const { role } = useUserRole();
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
         { role: "model", text: "Hello! I am your Lyka AI Executive Assistant. How can I help you dominate the luxury real estate market today?" }
@@ -40,20 +38,21 @@ export default function Chatbot() {
         setIsLoading(true);
 
         try {
-            // Build chat history for context
-            const history = messages.map(m => ({
-                role: m.role,
-                parts: [{ text: m.text }]
-            }));
+            const currentMessages = [...messages, { role: "user" as const, text: userMessage }];
 
-            const chat = model.startChat({
-                history,
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ messages: currentMessages, userRole: role })
             });
 
-            const result = await chat.sendMessage(userMessage);
-            const responseText = result.response.text();
+            if (!response.ok) {
+                throw new Error("Failed to fetch from API");
+            }
 
-            setMessages((prev) => [...prev, { role: "model", text: responseText }]);
+            const data = await response.json();
+
+            setMessages((prev) => [...prev, { role: "model", text: data.response || "No response received." }]);
         } catch (error) {
             console.error("Error generating AI response:", error);
             setMessages((prev) => [...prev, { role: "model", text: "I apologize, but I am experiencing temporary connectivity issues. Please try again later." }]);
