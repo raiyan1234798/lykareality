@@ -5,6 +5,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, ChevronRight } from "lucide-react";
 import { LogoSVG } from "@/components/ui/Logo";
+import { db } from "@/lib/firebase";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const InputField = ({ label, type = "text", value, onChange, required = true }: any) => {
     const [focused, setFocused] = useState(false);
@@ -68,15 +70,23 @@ export default function RequestAccess() {
 
     const prevStep = () => setStep(step - 1);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!formData.country || !formData.experience || !formData.role) return;
         setIsSubmitting(true);
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
+
+        try {
+            await addDoc(collection(db, "users"), {
+                ...formData,
+                status: "pending",
+                createdAt: serverTimestamp(),
+            });
             setSuccess(true);
-        }, 2000);
+        } catch (error) {
+            console.error("Error submitting request:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
